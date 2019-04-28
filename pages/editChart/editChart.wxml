@@ -1,0 +1,116 @@
+<view class="container">
+  <!--导航菜单-->
+  <view class="navbar" style="z-index:50">
+    <!--循环-->
+    <view wx:for="{{navbar}}" data-idx="{{index}}" wx:key="unique" class="item {{currentTab==index ? 'active' : ''}}" bindtap="navbarTap">
+      <view class="notice" wx:if="{{count[index]>0}}">{{count[index]}}</view>
+      {{item}}
+    </view>
+  </view>
+
+  <view id="subjectChart" class='chartContent'
+  hidden="{{currentTab !== 0}}">
+    <view class="tr th dark" >
+      <view class="td subjectName">评分项</view>
+      <view class="td subjectScore">分值</view>
+      <view class="tdLong">操作</view>
+    </view>
+    <scroll-view scroll-y class="table">
+      <block wx:for="{{subjectChart}}" wx:for-item="subject" wx:for-index="table_index">
+        <view class="tr light" wx:if="{{table_index % 2 == 0}}">
+          <view class="td subjectName" data-subject='{{subject}}' bindtap="openSubjectEdit">{{subject.name}}</view>
+          <view class="td subjectScore" data-subject='{{subject}}' bindtap="openSubjectEdit">{{subject.max_score}}</view>
+          <view class="operation" data-subject='{{subject}}' bindtap="openSubjectEdit">
+            <image class='icon' src='../img/icon_edit.png'></image>
+          </view>
+          <view class="operation" data-subject='{{subject}}' bindtap='deleteSubject'>
+            <image class='icon' src='../img/icon_delete.png'></image>
+          </view>
+        </view>
+        <view class="tr dark" wx:else >
+          <view class="td subjectName" data-subject='{{subject}}' bindtap="openSubjectEdit">{{subject.name}}</view>
+          <view class="td subjectScore" data-subject='{{subject}}' bindtap="openSubjectEdit">{{subject.max_score}}</view>
+          <view class="operation" data-subject='{{subject}}' bindtap="openSubjectEdit">
+            <image class='icon' src='../img/icon_edit.png'></image>
+          </view>
+          <view class="operation" data-subject='{{subject}}' bindtap='deleteSubject'>
+            <image class='icon' src='../img/icon_delete.png'></image>
+          </view>
+        </view>
+      </block>
+      <view class="tr th" style='position:'>
+        <view class="td subjectName">总分</view>
+        <view class="td subjectScore">{{totalScore}}</view>
+      </view>
+    </scroll-view>
+   
+    <button bindtap='addSubject'>+ 新增评分项</button>
+  </view>
+    
+  <view id="voteeChart" class='chartContent'
+  hidden="{{currentTab !== 1}}">
+    <view class="tr th dark" >
+      <view class="td voteeName">被评人名称</view>
+      <view class="tdLong">操作</view>
+    </view>
+    <scroll-view scroll-y class="table">
+      <block wx:for="{{voteeChart}}" wx:for-item="votee" wx:for-index="table_index">
+        <view class="tr light" wx:if="{{table_index % 2 == 0}}">
+          <view class="td voteeName" style="width:70%;" data-votee='{{votee}}' bindtap="openVoteeEdit">{{votee.name}}</view>
+          <view class="operation" data-votee='{{votee}}' bindtap="openVoteeEdit">
+            <image class='icon' src='../img/icon_edit.png'></image>
+          </view>
+          <view class="operation" data-votee='{{votee}}' bindtap='deleteVotee'>
+            <image class='icon' src='../img/icon_delete.png'></image>
+          </view>
+        </view>
+        <view class="tr dark" wx:else >
+          <view class="td voteeName" data-votee='{{votee}}' bindtap="openVoteeEdit">{{votee.name}}</view>
+          <view class="operation" data-votee='{{votee}}' bindtap="openVoteeEdit">
+            <image class='icon' src='../img/icon_edit.png'></image>
+          </view>
+          <view class="operation" data-votee='{{votee}}' bindtap='deleteVotee'>
+            <image class='icon' src='../img/icon_delete.png'></image>
+          </view>
+        </view>
+      </block>
+      </scroll-view>
+    <button bindtap='addVotee'>+ 新增被评人</button>
+  </view>
+
+  <view>
+    <button bindtap='settingDone'>完成设置</button>
+  </view>
+</view>
+
+<view wx:if="{{subjectEditShow}}" class="mask">
+  <view class="popBox">
+    <form bindsubmit='saveSubject'>
+      <input type="text" 
+      placeholder='请输入评分项名称' 
+      name="name" value="{{editSubject.name}}" 
+      maxlength='12'/>
+      <input type="text" placeholder='请输入评分项分值' 
+      name="max_score" value="{{editSubject.max_score}}" 
+      maxlength='5'/>
+      <button style='margin-top:40rpx;' form-type='submit' type="success">保存</button>
+      <button type="default" bindtap="closeSubjectModel">取消</button>
+    </form>
+    
+  </view>
+</view>
+
+<view wx:if="{{voteeEditShow}}" class="mask">
+  <view class="popBox">
+    <form bindsubmit='saveVotee'>
+      <input type="text" 
+      placeholder='请输入被评人名称' 
+      name="name" 
+      value="{{editVotee.name}}"
+      maxlength='10' />
+      <button style='margin-top:40rpx;' form-type='submit'  type="success">保存</button>
+      <button class="btn btn-cancle" type="default" bindtap="closeVoteeModel">取消</button>
+    </form>
+    
+  </view>
+</view>

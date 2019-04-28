@@ -1,0 +1,79 @@
+
+.chartContent {
+  background: #cef;
+  height: 84%;
+  padding: 30rpx;
+  margin: 10rpx;
+  border: 1px solid darkgray;
+  box-sizing: border-box;
+}
+.table{
+  width: 100%;
+  height: 80%;
+}
+.tr {
+    display: flex;
+    width: 100%;
+    height: 80rpx;
+    align-items: center;
+    line-height: 80rpx;
+}
+.th{
+  font-weight: bold;
+}
+.td {
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+    border-right: 1px solid gray;
+    flex-shrink: 0;
+}
+.subjectName{
+  width:40%;
+}
+.subjectScore{
+  width:30%;
+}
+.operation {
+  width: 15%;
+  text-align: center;
+}
+.voteeName{
+   width:70%;
+}
+.tdLong {
+  width: 30%;
+  text-align: center;
+}
+.icon{
+  float: left;
+  margin-left: 30rpx;
+  width: 50rpx;
+  height: 50rpx; 
+}
+.light{
+  background: #E6FEF9;
+}
+.dark{
+    background:#59e;
+}
+
+.chartContent button{
+  width: 100%;
+  margin-top: 30rpx;
+  background:white;  
+  color: #59e;
+  border: 1px #59e solid;
+  font-weight: bold;
+}
+
+.popBox{
+  position:absolute;
+  width:80%;
+  left:10%;
+  top:30%;
+  padding: 30rpx 0;
+}
+.popBox button{
+  margin-bottom: 20rpx;
+}

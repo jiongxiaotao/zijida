@@ -1,0 +1,49 @@
+<view class="container">
+  <view class='listContent' >
+    <!--当前进度-->
+    <view class='listTitle'>评分进度</view>
+    <progress class="progress" percent="{{percent}}" stroke-width="30" activeColor="#59e" backgroundColor="rgba(110, 120, 126, 0.5)" border-radius="15" active="true" active-mode="forwards">
+    <view class='progressText'>{{doneAmount}}/{{amount}}</view>
+    </progress>
+    <view class='listTitle'>评分结果</view>
+    <view class="tr th dark" >
+      <view class="td resultNo">排名</view>
+      <view class="td resultName">被评人</view>
+      <view class="td resultScore">得分/{{totalScore}}</view>
+      <view class="tdLong">操作</view>
+    </view>
+    <scroll-view scroll-y class="table">
+      <block wx:for="{{resultList}}" wx:for-item="result" wx:for-index="table_index">
+        <view class="tr light" wx:if="{{table_index % 2 == 0}}">
+          <view class="td resultNo" data-result='{{result}}' bindtap="openResultDetail">{{result.no}}</view>
+          <view class="td resultName" data-result='{{result}}' bindtap="openResultDetail">{{result.name}}</view>
+          <view class="td resultScore" data-result='{{result}}' bindtap="openResultDetail">{{result.score}}</view>
+          <view class="tdLong" data-result='{{result}}' bindtap="openResultDetail">评分详情</view>
+        </view>
+        <view class="tr dark" wx:else >
+          <view class="td resultNo" data-result='{{result}}' bindtap="openResultDetail">{{result.no}}</view>
+          <view class="td resultName" data-result='{{result}}' bindtap="openResultDetail">{{result.name}}</view>
+          <view class="td resultScore" data-result='{{result}}' bindtap="openResultDetail">{{result.score}}</view>
+          <view class="tdLong" data-result='{{result}}' bindtap="openResultDetail">评分详情</view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+    
+  <view>
+    <button bindtap='improve' class='halfButton'
+    hidden='{{improveHidden}}'>高级查看</button>
+    <button bindtap='stopProject'  class='halfButton' 
+    disabled="{{stopProjectDisable}}"
+    hidden='{{stopProjectHidden}}'>终止评分</button>
+  </view>
+</view>
+
+<view wx:if="{{resultDetailShow}}" class="mask" bindtap='closeResultDetail'>
+  <view class="chartBox">
+    <view class='chartContent'>
+      <ec-canvas id="barResult" canvas-id="mychart-multi-bar" ec="{{ ecBar }}"></ec-canvas>
+    </view>
+  </view>
+</view>
+

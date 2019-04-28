@@ -1,0 +1,11 @@
+
+.textContent{
+  background: #cef;
+  border: 1px solid white;
+  height: 90%;
+  padding: 60rpx;
+  margin: 10rpx;
+}
+.itemText{
+  height: 140rpx;
+}

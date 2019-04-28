@@ -1,0 +1,74 @@
+
+.listScroll{
+  height: 100%;
+}
+/* .list{
+  padding:50rpx 10rpx;
+} */
+.listItem{
+  padding:30rpx;
+  line-height: 40rpx;
+  background: #cef; 
+  border:white solid 1px;
+  margin: 0 10rpx;
+  margin-top: 30rpx; 
+}
+.listItem .textContent{
+  display: inline-block;
+  width: 70%;
+  line-height: 60rpx;
+}
+.listItem .itemLabel{
+  float: left;
+  display: inline-block;
+  width: 35%;
+}
+.listItem .itemText{
+  display: inline-block;
+  width: 65%;
+  font-weight: bold;
+  word-wrap: break-word;
+}
+.notPublish{
+  color: #666;
+}
+.published{
+  color:darkblue;
+}
+.scoring{
+  color:orange
+}
+.done{
+  color:green;
+}
+/* 一键复制 */
+.listItem .copy{
+  height:100%;
+  position:relative;
+  top:0;
+  width:30%;
+  float:right;
+}
+.listItem .copy image{
+  width: 120rpx;
+  height: 120rpx;
+}
+.listItem .copy text{
+  height:20px;
+  line-height:20px;
+  text-align:center;
+  float: left;
+}
+/* 添加评分项目 */
+.addProject{
+  padding:30rpx;
+  color:white;
+  line-height:60rpx;
+  background:#59e;
+  position:fixed;
+  right:20rpx;
+  bottom:120rpx;
+  width:180rpx;
+  height:180rpx;
+  border-radius:90rpx;
+}

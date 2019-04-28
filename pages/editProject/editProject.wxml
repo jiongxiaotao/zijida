@@ -1,0 +1,51 @@
+<view class="container">
+  <view class='textContent'>
+    <form bindsubmit='save'>
+      <view class='itemText'>
+        <input id="name" 
+          name="name"
+          data-index='0'
+          type='text'
+          placeholder='请输入项目名称,不长于16个字'
+          placeholder-class='placeholder'
+          maxlength='16'
+          confirm-type='next'
+          confirm-hold='true'
+          focus='{{inputIndex0}}'
+          bindconfirm='inputConfirm'
+          value="{{curProject.name}}"
+          ></input>
+      </view>
+      <view class='itemText'>
+        <input id="invite_code" 
+          name="invite_code"
+          data-index='1'
+          type='text'
+          placeholder='请输入邀请码，不长于16个字符'
+          placeholder-class='placeholder'
+          maxlength='16'
+          confirm-type='next'
+          confirm-hold='true'
+          focus='{{inputIndex1}}'
+          bindconfirm='inputConfirm'
+          value="{{curProject.invite_code}}"
+          ></input>
+      </view>
+      <view class='itemText'>
+        <input id="amount" 
+          name="amount"
+          data-index='2'
+          type='number'
+          placeholder='请输入评分收集总数'
+          placeholder-class='placeholder'
+          maxlength='5'
+          confirm-type='done'
+          confirm-hold='false'
+          focus='{{inputIndex2}}'
+          value="{{curProject.amount}}"
+          ></input>
+      </view>
+      <button form-type='submit'>保存</button>
+    </form>
+  </view> 
+</view>

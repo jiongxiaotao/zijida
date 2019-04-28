@@ -1,0 +1,55 @@
+<view class="container">
+  <view class='listContent' >
+    <!--当前进度-->
+    <view class='listTitle' hidden='{{projectEditable}}'>请为每位被评人评分</view>
+    <view class='listTitle' hidden='{{!projectEditable}}'>评分表预览</view>
+    <view class="tr th dark" >
+      <view class="td scoringName">被评人</view>
+      <view class="td scoringScore">得分/{{totalScore}}</view>
+      <view class="tdLong">操作</view>
+    </view>
+    <scroll-view scroll-y class="table">
+      <block wx:for="{{voteeList}}" wx:for-item="scoring" wx:for-index="table_index">
+        <view class="tr light" wx:if="{{table_index % 2 == 0}}">
+          <view class="td scoringName" data-scoring='{{scoring}}' bindtap="openScoreSheet">{{scoring.name}}</view>
+          <view class="td scoringScore {{scoring.scoreClass}}" data-scoring='{{scoring}}' bindtap="openScoreSheet" wx:class='{{scoring.totalScore}}'>{{scoring.totalScore}}</view>
+          <view class="tdLong" data-scoring='{{scoring}}' bindtap="openScoreSheet" wx:if="{{scoring.totalScore}}">修改评分</view>
+          <view class="tdLong" data-scoring='{{scoring}}' bindtap="openScoreSheet" wx:if="{{!scoring.totalScore}}">进入评分</view>
+        </view>
+        <view class="tr dark" wx:else >
+          <view class="td scoringName" data-scoring='{{scoring}}' bindtap="openScoreSheet">{{scoring.name}}</view>
+          <view class="td scoringScore {{scoring.scoreClass}}" data-scoring='{{scoring}}' bindtap="openScoreSheet">{{scoring.totalScore}}</view>
+          <view class="tdLong" data-scoring='{{scoring}}' bindtap="openScoreSheet" wx:if="{{scoring.totalScore}}">修改评分</view>
+          <view class="tdLong" data-scoring='{{scoring}}' bindtap="openScoreSheet" wx:if="{{!scoring.totalScore}}">进入评分</view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+    
+  <view>
+    <button bindtap='submitScoring' hidden='{{projectStatus}}'
+    >提交评分</button>
+  </view>
+</view>
+
+<view wx:if="{{scoringDetailShow}}" class="mask">
+  <view class="popBox">
+    <form bindsubmit='saveScoreSheet'>
+      <scroll-view scroll-y style='height:76%;'>
+      <block wx:for="{{scoreSheet}}" wx:for-item="subject" >
+        <input type="text" 
+        placeholder='{{subject.name}},满分{{subject.max_score}}' 
+        name="subject_{{subject.id}}" 
+        value="{{subject.score}}"
+        maxlength='10'
+        data-subject="{{subject}}" />
+      </block>
+      </scroll-view>
+      <button style='margin-top:40rpx;' form-type='submit'  type="success"
+      disabled="{{projectStatus}}">保存</button>
+      <button class="btn btn-cancle" type="default" bindtap="closeScoreSheet">取消</button>
+    </form>
+    
+  </view>
+</view>
+

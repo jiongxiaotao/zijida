@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "评分结果",
+  "usingComponents": {
+    "ec-canvas": "../../utils/ec-canvas/ec-canvas"
+  }
+}

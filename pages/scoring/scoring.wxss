@@ -1,0 +1,81 @@
+
+.listContent {
+  background: #cef;
+  height: 90%;
+  padding: 30rpx;
+  margin: 10rpx;
+  border: 1px solid darkgray;
+  box-sizing: border-box;
+}
+.listTitle{
+  margin: 20rpx 0 10rpx 0;
+}
+.progressText{
+ position:absolute;
+  display:inline-block;
+  left:48%;
+  margin-top:-20rpx;
+
+}
+.table{
+  width: 100%;
+  height: 80%;
+}
+.tr {
+    display: flex;
+    width: 100%;
+    height: 80rpx;
+    align-items: center;
+    line-height: 80rpx;
+}
+.th{
+  font-weight: bold;
+}
+.td {
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+    border-right: 1px solid gray;
+    flex-shrink: 0;
+}
+
+.scoringName{
+  width:38%;
+}
+.scoringScore{
+  width:38%;
+}
+.operation {
+  width: 24%;
+  text-align: center;
+}
+.tdLong {
+  width: 24%;
+  text-align: center;
+}
+.icon{
+  float: left;
+  margin-left: 30rpx;
+  width: 50rpx;
+  height: 50rpx; 
+}
+.light{
+  background: #E6FEF9;
+}
+.dark{
+    background:#59e;
+}
+.red{
+  color: red;
+}
+.popBox{
+  position:absolute;
+  width:80%;
+  height: 80%;
+  left:10%;
+  top:10%;
+  padding: 30rpx 0;
+}
+.popBox button{
+  margin-bottom: 20rpx;
+}

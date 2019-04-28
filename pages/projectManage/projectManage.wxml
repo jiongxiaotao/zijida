@@ -1,0 +1,105 @@
+<wxs module="filter" src="../filter/filter.wxs"></wxs>
+<view class="container">
+  <!--导航菜单-->
+  <view class="navbar" style="z-index:50">
+    <!--循环-->
+    <view wx:for="{{navbar}}" data-idx="{{index}}" wx:key="unique" class="item {{currentTab==index ? 'active' : ''}}" bindtap="navbarTap">
+      {{item}}
+    </view>
+  </view>
+  <!-- 选择器-->
+  
+  <!--正在评分-->
+  <scroll-view 
+    scroll-y 
+    hidden="{{currentTab !== 0}}" id="doingList" class='listScroll'>
+    <view class='list'> 
+      <view class="listItem" wx:for="{{doingList}}" data-status="{{item.status}}" >
+        <view class='textContent'>
+          <!-- 选择框，不同状态的可选项不同 -->
+          <picker bindchange="chooseOperMenu" 
+          data-project="{{item}}" 
+          value="0" 
+          range="{{operMenu[item.status]}}">
+            <view>
+              <view class='itemLabel'>
+                <label for="name_{{item.id}}">项目名称:</label>
+              </view>
+              <view class='itemText'>
+                <text id="name_{{item.id}}">{{item.name}}</text>
+              </view>
+            </view>
+            <view>
+              <view class='itemLabel'>
+                <label for="status_{{item.id}}">项目状态:</label>
+              </view>
+              <view class='itemText'>
+                <text id="status_{{item.id}}" class='{{filter.publishStatusClassFilter(item.status)}}'>{{filter.publishStatusFilter(item.status)}}</text>
+              </view>
+            </view>
+            <view>
+              <view class='itemLabel'>
+                <label for="inviteCode_{{item.id}}">邀请码:</label>
+              </view>
+              <view class='itemText'>
+                <text id="inviteCode_{{item.id}}" >{{item.invite_code}}</text>
+              </view>
+            </view>
+            <view>
+              <view class='itemLabel'>
+                <label for="progress_{{item.id}}">当前进度:</label>
+              </view>
+              <view class='itemText'>
+                <text id="progress_{{item.id}}" class="{{item.done_amount ==item.amount ? 'done':'scoring'}}">{{item.done_amount}}/{{item.amount}}</text>
+              </view>
+            </view>
+            
+          </picker>
+        </view>
+        <!-- 一键复制 -->
+        <view id="copy_{{item.id}}" class='copy' bindtap='copy'>
+          <image src="/pages/img/icon_copy.png"></image>
+          <text>一键复制</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <!--已完成-->
+  <scroll-view 
+    scroll-y 
+    hidden="{{currentTab !== 1}}" id="doneList" class='listScroll'>
+    <view class='list'> 
+      <view class="listItem" wx:for="{{doneList}}" data-status="{{item.status}}" 
+      data-project="{{item}}"
+      bindtap='goResult'>
+        <view class='textContent'>
+          <view>
+            <view class='itemLabel'>
+              <label for="name_{{item.id}}">项目名称:</label>
+            </view>
+            <view class='itemText'>
+              <text id="name_{{item.id}}">{{item.name}}</text>
+            </view>
+          </view>
+          <view>
+            <view class='itemLabel'>
+              <label for="inviteCode_{{item.id}}">邀请码:</label>
+            </view>
+            <view class='itemText'>
+              <text id="inviteCode_{{item.id}}" >{{item.invite_code}}</text>
+            </view>
+          </view>
+          <view>
+            <view class='itemLabel'>
+              <label for="progress_{{item.id}}">当前进度:</label>
+            </view>
+            <view class='itemText'>
+              <text id="progress_{{item.id}}" class="{{item.done_amount ==item.amount ? 'done':'scoring'}}">{{item.done_amount}}/{{item.amount}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <button class='addProject' id="addProject" bindtap='goAddProject'>新建评分项目</button> 
+</view>

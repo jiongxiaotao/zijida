@@ -1,0 +1,46 @@
+/* pages/index/index.wxss */
+.tipLight{
+  margin-top:100rpx;
+  line-height:40rpx;
+  height:40rpx;
+  font-size:36rpx;
+  color:#59e;
+  text-align: center;
+}
+.main{
+  height: 100%;
+  width:100%;
+  position: absolute;
+  top: 300rpx;
+}
+#inviteCode{
+  margin-bottom: 60rpx;
+}
+
+.weatherInfo{
+  position:absolute;
+  right:40rpx;
+  top: 10rpx;
+  color:#59e;
+}
+.weatherInfo image{
+  width:20rpx;
+  height: 20rpx;
+  margin: 0 10rpx;
+}
+.weatherDetail{
+  color: white;
+  position:absolute;
+  padding: 10rpx;
+  top:60rpx;
+  right:40rpx;
+  border:1px solid #59e;
+  background: rgba(2, 62, 131, 0.5); 
+  text-align: right;
+}
+.weatherDetail image{
+  width:20rpx;
+  height:20rpx;
+  margin: 10rpx 10rpx;
+  float:left;
+}

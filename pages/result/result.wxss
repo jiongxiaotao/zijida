@@ -1,0 +1,89 @@
+
+.listContent {
+  background: #cef;
+  height: 90%;
+  padding: 30rpx;
+  margin: 10rpx;
+  border: 1px solid darkgray;
+  box-sizing: border-box;
+}
+.listTitle{
+  margin: 20rpx 0 10rpx 0;
+}
+.progressText{
+ position:absolute;
+  display:inline-block;
+  left:48%;
+  margin-top:-20rpx;
+
+}
+.table{
+  width: 100%;
+  height: 80%;
+}
+.tr {
+    display: flex;
+    width: 100%;
+    height: 80rpx;
+    align-items: center;
+    line-height: 80rpx;
+}
+.th{
+  font-weight: bold;
+}
+.td {
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+    border-right: 1px solid gray;
+    flex-shrink: 0;
+}
+.resultNo{
+  width:12%;
+}
+.resultName{
+  width:32%;
+}
+.resultScore{
+  width:30%;
+}
+.operation {
+  width: 13%;
+  text-align: center;
+}
+.tdLong {
+  width: 26%;
+  text-align: center;
+}
+.icon{
+  float: left;
+  margin-left: 30rpx;
+  width: 50rpx;
+  height: 50rpx; 
+}
+.light{
+  background: #E6FEF9;
+}
+.dark{
+    background:#59e;
+}
+.halfButton{
+  display: inline-block;
+  width: 45%;
+  margin: 0 16rpx;
+}
+.chartBox{
+  position:absolute;
+  width:100%;
+  height: 80%;
+  top:10%;
+  
+}
+.chartContent{
+  width:90%;
+  height: 90%;
+}
+ec-canvas{
+  width:100%;
+  height: 100%;
+}

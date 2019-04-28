@@ -1,0 +1,31 @@
+//项目发布状态，数字转中文
+function publishStatusFilter(status){
+  switch(status.toString()){
+    case "0":
+      return "未发布";
+    case "1":
+      return "已发布";
+    case "2":
+      return "已开放评分";
+    case "9":
+      return "已终止"; 
+  }
+}
+//项目发布状态，页面显示样式class
+function publishStatusClassFilter(status) {
+  switch (status.toString()) {
+    case "0":
+      return "notPublish";
+    case "1":
+      return "published";
+    case "2":
+      return "scoring";
+    case "9":
+      return "done"
+  }
+}
+
+module.exports = {
+  publishStatusFilter: publishStatusFilter,
+  publishStatusClassFilter: publishStatusClassFilter
+}

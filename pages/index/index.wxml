@@ -1,0 +1,35 @@
+<!--index.wxml-->
+<view class="container">
+  <view class='tipLight'>
+    <text>{{userInfo.cus_name}} ，您好，欢迎使用</text>
+    <text>自己打——自定义评分系统！</text>
+  </view>
+  <view class='weatherInfo' bindtap='showWeatherDetail'>{{weatherDetail.weatherDesc}}<image src='/pages/img/arrow_down.png'></image></view>
+  <view class='weatherDetail' wx:if="{{weatherShow}}" bindtap='hideWeatherDetail'>
+    <view>城市：{{weatherDetail.currentCity}}<image src='/pages/img/arrow_up.png'></image></view>
+    <view>天气：{{weatherDetail.weatherDesc}}</view>
+    <view>PM2.5：{{weatherDetail.pm25}}</view>
+    <view>温度：{{weatherDetail.temperature}}</view>
+    <view>风力:{{weatherDetail.wind}}</view>
+  </view>
+  <view class='main'>
+  <form bindsubmit='goScoring'>
+    <input 
+      placeholder="请输入评分邀请码" 
+      placeholder-class='placeholder'
+      id='inviteCode' 
+      name='inviteCode'
+      maxlength='16'></input>
+    <button form-type='submit' >进入评分</button>
+  </form>
+    
+    <!-- <button bindtap='testOCR' data-side="front">测试证件OCR识别正面</button>
+    <button bindtap='testOCR' data-side="back">测试证件OCR识别反面</button>
+    <button bindtap='testJump'>测试跳转</button>
+    <button bindtap='testFR'>测试RLSB</button>
+    <button bindtap='testQRcode'>测试扫码</button>
+     <button bindtap='testMap'>测试地图</button> -->
+    <image src="{{tempFilePaths}}" mode="aspecFill" style="width: 200rpx; height: 250rpx"/>
+  </view>
+  
+</view>
