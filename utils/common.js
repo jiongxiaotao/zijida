@@ -83,7 +83,7 @@ function getUserInfo(loginCode,after){
           encryptedData: data.encryptedData,    //加密的用户信息
           iv:data.iv //用于解密的偏移量
         }
-        server.updateUserInfo(param).then(function (userData) {
+        server.updateUserInfo(loginCode,param).then(function (userData) {
           getApp().globalData.userInfo = userData.userInfo;
           console.log("P2S保存用户信息成功:" + getApp().globalData.userInfo.cus_name);
           after && after();
@@ -103,7 +103,7 @@ function getUserInfo(loginCode,after){
           encryptedData: data.encryptedData,    //加密的用户信息
           iv: data.iv //用于解密的偏移量
         }
-        server.updateUserInfo(param).then(function (userData) {
+        server.updateUserInfo(loginStatus.loginCode,param).then(function (userData) {
           getApp().globalData.userInfo = userData.userInfo;
           console.log("P2S保存用户信息成功:" + getApp().globalData.userInfo.cus_name);
           after && after();

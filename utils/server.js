@@ -64,8 +64,8 @@ function queryUserInfo(loginCode) {
   })
 }
 //保存用户信息
-function updateUserInfo(jsonData, succ) {
-  loginCode = encodeURIComponent(jsonData.loginCode); //编码
+function updateUserInfo(loginCode,jsonData, succ) {
+  loginCode = encodeURIComponent(loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "miniSaveUserInfo?loginCode=" +loginCode,

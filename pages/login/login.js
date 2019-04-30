@@ -22,7 +22,7 @@ Page({
         encryptedData: e.detail.encryptedData,    //加密的用户信息
         iv: e.detail.iv //用于解密的偏移量
       }
-      server.updateUserInfo(param).then(function (data) {
+      server.updateUserInfo(loginStatus.loginCode,param).then(function (data) {
         app.globalData.userInfo = data.userInfo;
         console.log("P2S保存用户信息成功:" + getApp().globalData.userInfo.cus_name);
         //用户已经授权过,返回到首页
