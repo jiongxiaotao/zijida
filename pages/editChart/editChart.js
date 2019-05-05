@@ -189,8 +189,36 @@ Page({
   },
   //设置完成，退回到项目列表,url一定要用绝对路径
   settingDone(e){
-    util.navigateBack({
-      url: 'pages/projectManage/projectManage',
-    })
+    var that=this;
+    if(that.data.voteeChart.length==0)
+      wx.showModal({
+        title: '提示',
+        content: '暂未设置被评人，后续可以通过“编辑评分内容”添加，确认完成设置？',
+        showCancel: true,
+        cancelText: "取消",
+        confirmText: '确认',
+        success: function (res) {
+          if (res.confirm) {
+            util.navigateBack({
+              url: 'pages/projectManage/projectManage',
+            })
+          }
+        }
+      })
+    else if (that.data.subjectChart.length == 0)
+      wx.showModal({
+        title: '提示',
+        content: '暂未设置评分项，后续可以通过“编辑评分内容”添加，确认完成设置？',
+        showCancel: true,
+        cancelText: "取消",
+        confirmText: '确认',
+        success: function (res) {
+          if (res.confirm) {
+            util.navigateBack({
+              url: 'pages/projectManage/projectManage',
+            })
+          }
+        }
+      })
   }
 })

@@ -1,5 +1,5 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
     "pages/login/login",
     "pages/projectManage/projectManage",
@@ -10,11 +10,11 @@
     "pages/map/map",
     "pages/outwebview/outwebview"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#001122",
     "navigationBarTitleText": "自己打",
-    "navigationBarTextStyle":"white"
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#888",
@@ -23,8 +23,8 @@
       {
         "pagePath": "pages/index/index",
         "text": "评委评分",
-        "iconPath":"pages/img/dafen.png",
-        "selectedIconPath":"pages/img/dafen.png"
+        "iconPath": "pages/img/dafen.png",
+        "selectedIconPath": "pages/img/dafen.png"
       },
       {
         "pagePath": "pages/projectManage/projectManage",
@@ -38,5 +38,6 @@
     "scope.userLocation": {
       "desc": "小程序请求获取位置信息"
     }
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }
