@@ -1,7 +1,7 @@
 //logs.js
 var server = require('../../utils/server.js')
 var util = require('../../utils/util.js')
-
+import WxValidate from '../../utils/WxValidate.js'
 const app = getApp()
 Page({
   data: {
@@ -18,7 +18,7 @@ Page({
     var that = this;
     that.setData({
       projectId: options.id ? options.id :0,
-      projectStatus: options.status==2? false:true
+      projectEditable: options.status==2? true:false
     })
     //根据项目编号查评分的所有被评人，初始化当前用户给他打的分数
     server.getVoteeList(app.globalData.loginCode,that.data.projectId).then(voteeData => {
@@ -45,13 +45,12 @@ Page({
     //获取所有评分项，初始化每项分数
     server.getSubjectList(app.globalData.loginCode,that.data.projectId).then(subjectData => {
       var subjectList = subjectData.subjectList;
-      // for (let i = 0; i < subjectList.length;i++){
-      //   subjectList[i].score="";
-      // }
       that.setData({
         subjectList: subjectList,
         totalScore: subjectData.totalScore
       })
+      //表单校验
+      that.initValidate();
     })
     
     //判断项目状态如果不为开放评分，则操作和提交不可用
@@ -82,6 +81,15 @@ Page({
     const voteeId = that.data.curScoring.id;//当前选中的被评人id
     const key = that.data.projectId + "_" + voteeId;//projectId_voteeId 作为storage的key
    
+    //输入框内容验证
+    if (!that.WxValidate.checkForm(e.detail.value)) {
+      const error = that.WxValidate.errorList[0]
+      wx.showModal({
+        content: error.msg,
+        showCancel: false
+      })
+      return false
+    }
     let flag=true; // 表格校验
     var scoreSheet = that.data.scoreSheet;
     //缓存已有，直接修改
@@ -197,6 +205,24 @@ Page({
       })
     }
     
+  },
+  //表单验证
+  initValidate: function () {
+    var that=this;
+    var rules = {};
+    var messages={};
+    for(var i=0;i<that.data.subjectList.length;i++){
+      let key="subject_"+that.data.subjectList[i].id;
+      rules[key]={
+        required:true,
+        number:true
+      }
+      messages[key]={
+        required: that.data.subjectList[i].name+ '请打分',
+        number: '请填写数字'
+      }
+    }
+    this.WxValidate = new WxValidate(rules, messages);
   }
 
 })

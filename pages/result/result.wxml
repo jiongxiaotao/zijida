@@ -39,8 +39,11 @@
   </view>
 </view>
 
-<view wx:if="{{resultDetailShow}}" class="mask" bindtap='closeResultDetail'>
+<view wx:if="{{resultDetailShow}}" class="mask" >
   <view class="chartBox">
+    <view class='closeBox' bindtap='closeResultDetail'>
+      <image src='../img/close.png' class='close'></image>
+    </view>
     <view class='chartContent'>
       <ec-canvas id="barResult" canvas-id="mychart-multi-bar" ec="{{ ecBar }}"></ec-canvas>
     </view>

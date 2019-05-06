@@ -1,6 +1,7 @@
 //logs.js
 var server = require('../../utils/server.js')
 var util = require('../../utils/util.js')
+import WxValidate from '../../utils/WxValidate.js'
 const app = getApp()
 Page({
   data: {
@@ -35,6 +36,8 @@ Page({
         voteeChart: data.voteeList
       })
     })
+    //初始化表单验证规则
+    that.initValidate();
   },
   //响应点击导航栏
   navbarTap: function (e) {
@@ -70,6 +73,15 @@ Page({
     var subject = that.data.editSubject;
     subject.name=e.detail.value["name"];
     subject.max_score = e.detail.value["max_score"];
+    //输入框内容验证
+    if (!that.subjectValidate.checkForm(e.detail.value)) {
+      const error = that.subjectValidate.errorList[0]
+      wx.showModal({
+        content: error.msg,
+        showCancel: false
+      })
+      return false
+    }
     if(that.data.editMode=='add'){
       //新增评分项
       server.addSubject(app.globalData.loginCode,subject).then(function (data) {
@@ -143,6 +155,15 @@ Page({
     var that = this;
     var votee = that.data.editVotee;
     votee.name = e.detail.value["name"];
+    //输入框内容验证
+    if (!that.voteeValidate.checkForm(e.detail.value)) {
+      const error = that.voteeValidate.errorList[0]
+      wx.showModal({
+        content: error.msg,
+        showCancel: false
+      })
+      return false
+    }
     //新增该被评人
     if(that.data.editMode=="add"){
       server.addVotee(app.globalData.loginCode,votee).then(function (data) {
@@ -220,5 +241,47 @@ Page({
           }
         }
       })
+    else
+      util.navigateBack({
+        url: 'pages/projectManage/projectManage',
+      })
+  },
+  //表单验证
+  initValidate: function (e) {
+    //subject验证规则
+    const subjectRules = {
+      name: {
+        required: true
+      },
+      max_score: {
+        required: true,
+        number: true,
+        max:65535
+      }
+    }
+    const subjectMessages = {
+      name: {
+        required: '请填写评分项名称'
+      },
+      max_score: {
+        required: '请填写评分项分值',
+        number: '请填写数字',
+        max:'数值超限'
+      }
+    }
+    this.subjectValidate = new WxValidate(subjectRules, subjectMessages);
+    
+    //votee验证规则
+    const voteeRules = {
+      name: {
+        required: true
+      }
+    }
+    const voteeMessages = {
+      name: {
+        required: '请填写被评人名称'
+      }
+    }
+    this.voteeValidate = new WxValidate(voteeRules, voteeMessages);
   }
 })

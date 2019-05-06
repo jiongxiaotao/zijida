@@ -73,6 +73,7 @@
   left:10%;
   top:30%;
   padding: 30rpx 0;
+  background: #cef;
 }
 .popBox button{
   margin-bottom: 20rpx;

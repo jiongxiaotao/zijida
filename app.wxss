@@ -89,6 +89,3 @@ button:hover{
   background: rgba(0,0,0,0.5);
   
 }
-.mask view{
-  background: #cef;
-}

@@ -65,6 +65,7 @@ Page({
     var names=[];//标题
     var scores=[];//分数
     var leftScores = [];//每项的总分减去当前得分
+    result.subjects=result.subjects.reverse();
     for (let i =0; i < result.subjects.length;i++){
       names.push(result.subjects[i].name);
       scores.push(result.subjects[i].score);
@@ -83,6 +84,9 @@ Page({
           trigger: 'axis',
           axisPointer: {            // 坐标轴指示器，坐标轴触发有效
             type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: function(params){
+            return "得分:"+params[0].value;
           }
         },
         legend: {
@@ -90,7 +94,7 @@ Page({
         },
         grid: {
           left: 20,
-          right: 20,
+          right: 30,
           bottom: 15,
           top: 40,
           containLabel: true
@@ -129,6 +133,7 @@ Page({
             type: 'bar',
             stack: 'one',
             label: {
+              show:false,
               normal: {
                 show: true,
                 position: 'inside',
@@ -145,17 +150,8 @@ Page({
             name: '',
             type: 'bar',
             stack: 'one',
-            label: {
-              normal: {
-                show: true,
-                formatter: function (e) {
-                  return "";
-                }
-              }
-            },
             data: leftScores
           }
-         
         ]
       });
       // 注意这里一定要返回 chart 实例，否则会影响事件处理等

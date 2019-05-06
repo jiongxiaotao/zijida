@@ -1,4 +1,5 @@
 var server = require('../../utils/server.js')
+import WxValidate from '../../utils/WxValidate.js'
 const app = getApp()
 Page({
 
@@ -33,7 +34,8 @@ Page({
         curProject: wx.getStorageSync("curProject")
       })
     }
-
+    //初始化表单验证规则
+    that.initValidate();
   },
   /**
    * 生命周期函数--页面展示时，包括页面栈退回到当前页
@@ -47,6 +49,15 @@ Page({
     curProject.name = e.detail.value["name"];
     curProject.invite_code = e.detail.value["invite_code"];
     curProject.amount = e.detail.value["amount"];
+    //输入框内容验证
+    if (!that.WxValidate.checkForm(e.detail.value)) {
+      const error = that.WxValidate.errorList[0]
+      wx.showModal({
+        content: error.msg,
+        showCancel: false
+      })
+      return false
+    }
     //更新
     if (that.data.editType == "edit") {
       server.updateProject(app.globalData.loginCode,curProject).then(function (data) {
@@ -84,5 +95,37 @@ Page({
         inputIndex2: true
       })
     }
+  },
+  //表单验证
+  initValidate:function(e){
+    const rules = {
+      name: {
+        required: true,
+        minlength: 2
+      },
+      invite_code: {
+        required: true,
+        minlength: 4
+      },
+      amount: {
+        required: true,
+        number: true
+      }
+    }
+    const messages = {
+      name: {
+        required: '请填写姓名',
+        minlength: '请输入正确的名称'
+      },
+      invite_code: {
+        required: '请填写邀请码',
+        minlength: '请填写不小于4位邀请码'
+      },
+      amount: {
+        required: '请填写预期收集数量',
+        number: '请填写数字'
+      }
+    }
+    this.WxValidate = new WxValidate(rules, messages);
   }
 })

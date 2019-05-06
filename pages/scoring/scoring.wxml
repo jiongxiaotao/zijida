@@ -1,8 +1,8 @@
 <view class="container">
   <view class='listContent' >
     <!--当前进度-->
-    <view class='listTitle' hidden='{{projectEditable}}'>请为每位被评人评分</view>
-    <view class='listTitle' hidden='{{!projectEditable}}'>评分表预览</view>
+    <view class='listTitle' hidden='{{!projectEditable}}'>请为每位被评人评分</view>
+    <view class='listTitle' hidden='{{projectEditable}}'>评分表预览</view>
     <view class="tr th dark" >
       <view class="td scoringName">被评人</view>
       <view class="td scoringScore">得分/{{totalScore}}</view>
@@ -27,7 +27,7 @@
   </view>
     
   <view>
-    <button bindtap='submitScoring' hidden='{{projectStatus}}'
+    <button bindtap='submitScoring' hidden='{{!projectEditable}}'
     >提交评分</button>
   </view>
 </view>
@@ -46,7 +46,7 @@
       </block>
       </scroll-view>
       <button style='margin-top:40rpx;' form-type='submit'  type="success"
-      disabled="{{projectStatus}}">保存</button>
+      disabled="{{!projectEditable}}">保存</button>
       <button class="btn btn-cancle" type="default" bindtap="closeScoreSheet">取消</button>
     </form>
     
