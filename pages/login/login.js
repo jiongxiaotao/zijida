@@ -16,6 +16,7 @@ Page({
       console.log("授权获取用户信息成功！");
       //前端保存用户信息
       var loginStatus = wx.getStorageSync("loginStatus");
+      
       //将从新授权并获取的用户信息保存
       var param = {
         loginCode: loginStatus.loginCode,

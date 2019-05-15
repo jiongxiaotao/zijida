@@ -1,17 +1,67 @@
 /* pages/index/index.wxss */
+.avatar{
+  width:180rpx;
+  height:180rpx;
+  border-radius:50%;
+  margin:80rpx auto;
+}
 .tipLight{
-  margin-top:100rpx;
   line-height:40rpx;
   height:40rpx;
   font-size:36rpx;
   color:#59e;
   text-align: center;
 }
+.voiceMessage{
+  position:absolute;
+  bottom:100rpx;
+  right:-190px;
+  width:250px;
+  height:62px;
+  border:1px solid white;
+  border-radius:31px;
+  z-index: 99;
+}
+.cancleTip{
+  position:absolute;
+  top:-100rpx;
+  left:-40rpx;
+  text-align:center;
+}
+.cancleTip .cancleTipImg{
+  width:200rpx;
+  height:60rpx;
+}
+.voiceMessage .voiceButton{
+  height:60px;
+  width:60px;
+  float:left;
+  display:inline-block;
+  margin-left:2px;
+}
+.voiceMessage  .text{
+  line-height:29px;
+  margin:2px;
+  width: 120px;
+  font-size: 30rpx;
+  float: left;
+}
+.voiceMessage .hideVoiceMessageView{
+  display:inline-block;
+  float:left;
+  line-height:60px;
+  margin-top: 10px;
+}
+.voiceMessage .hideVoiceMessage{
+  width:30px;
+  height: 30px;
+  margin: 0 10rpx;
+}
 .main{
   height: 100%;
   width:100%;
   position: absolute;
-  top: 300rpx;
+  top: 500rpx;
 }
 #inviteCode{
   margin-bottom: 60rpx;

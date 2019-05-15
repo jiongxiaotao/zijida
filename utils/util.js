@@ -59,6 +59,30 @@ function _ajax(option) {
     })
   // }
 }
+//上传文件
+function _uploadFile(option){
+  wx.showLoading({
+    title: option.loading ? option.loading : '正在上传...',
+  })
+  wx.uploadFile({
+    url: config.baseUrl + option.url,//这是你自己后台的连接
+    filePath: option.filePath,
+    name: option.name,//后台要绑定的名称
+    header: {
+      "Content-Type": "multipart/form-data"
+    },
+    //参数绑定
+    formData:option.formData,
+    success: function (data) {
+      wx.hideLoading();
+      option.success(JSON.parse(data.data));
+    },
+    fail: function (data) {
+      wx.hideLoading();
+      option.fail();
+    }
+  })
+}
 //页面栈回退，参数：目标页面的全路径
 const navigateBack = (destRoute) => {
   let stack = getCurrentPages();//获取页面栈
@@ -100,5 +124,6 @@ const formatNumber = n => {
 module.exports = {
   formatTime: formatTime,
   ajax:_ajax,
+  uploadFile: _uploadFile,
   navigateBack: navigateBack
 }

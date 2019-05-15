@@ -1,16 +1,33 @@
 <!--index.wxml-->
 <view class="container">
+  <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
   <view class='tipLight'>
-    <text>{{userInfo.cus_name}} ，您好，欢迎使用</text>
-    <text>自己打——自定义评分系统！</text>
+    <view>{{userInfo.cus_name}} ，您好，</view>
+    <view>欢迎使用自己打——自定义评分系统！</view>
   </view>
   <view class='weatherInfo' bindtap='showWeatherDetail'>{{weatherDetail.weatherDesc}}<image src='/pages/img/arrow_down.png'></image></view>
   <view class='weatherDetail' wx:if="{{weatherShow}}" bindtap='hideWeatherDetail'>
-    <view>城市：{{weatherDetail.currentCity}}<image src='/pages/img/arrow_up.png'></image></view>
+    <view>城市：{{weatherDetail.currentCity}}<image src='/pages/img/arrow_up_click.png'></image></view>
     <view>天气：{{weatherDetail.weatherDesc}}</view>
     <view>PM2.5：{{weatherDetail.pm25}}</view>
     <view>温度：{{weatherDetail.temperature}}</view>
     <view>风力:{{weatherDetail.wind}}</view>
+  </view>
+  <view class='voiceMessage'  animation="{{voiceMessageAnimation}}">
+    <image class="voiceButton" src="/pages/img/voice.png" bindtap='showVoiceMessage' wx:if="{{!voiceMessageStatus}}"></image>
+    <view class='cancleTip' hidden='{{!ifVoiceButtonTapping}}'>
+      <view>上滑取消   {{daojishi}}</view>
+      <image class="cancleTipImg" src='/pages/img/arrow_up.png'></image>
+    </view>
+    <image class="voiceButton" src="/pages/img/voice_click.png" 
+    bindtouchstart='startVoiceRecording' bindtouchend="stopVoiceRecording" bindtouchmove="cancleVoiceRecording" 
+    ></image>
+    <view class='text' wx:if="{{voiceMessageStatus}}">
+      <text>长按留言，抛出你的虫子(bug)</text>
+    </view>
+    <view class='hideVoiceMessageView'>
+      <image class="hideVoiceMessage" src='/pages/img/arrow_right.png' bindtap='hideVoiceMessage'></image>
+    </view>
   </view>
   <view class='main'>
   <form bindsubmit='goScoring'>
