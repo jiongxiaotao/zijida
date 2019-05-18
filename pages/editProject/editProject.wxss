@@ -6,6 +6,20 @@
   padding: 60rpx;
   margin: 10rpx;
 }
+.pickerText{
+  font-size: 36rpx;
+  display: inline-block;
+  float: left;
+  line-height: 70rpx;
+}
+.pickerTip{
+  display: inline-block;
+  line-height: 70rpx;
+  color: orange;
+  font-size: 28rpx;
+  float: right;
+  margin-right:30rpx; 
+}
 .itemText{
   height: 140rpx;
 }

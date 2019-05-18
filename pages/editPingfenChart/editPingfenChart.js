@@ -15,8 +15,9 @@ Page({
     editSubject:{}, //当前编辑的评分项
     voteeEditShow:false, //
     editVotee: {}, //当前编辑的被评人
-    editMode:'add' //编辑模式，新增/更新
-    
+    editMode:'add', //编辑模式，新增/更新
+    inputIndex0:true,//输入框焦点索引
+    inputIndex1: false   //输入框焦点索引
   },
   onLoad: function (options) {
     var that=this;
@@ -24,14 +25,14 @@ Page({
       projectId: options.id ? options.id : "0"
     })
     //根据项目编号查评分的所有评分项
-    server.getSubjectList(app.globalData.loginCode,that.data.projectId).then(data=>{
+    server.getSubjectList(that.data.projectId).then(data=>{
       that.setData({
         subjectChart: data.subjectList,
         totalScore: data.totalScore
       })
     })
     //根据项目编号查评分的所有被评人
-    server.getVoteeList(app.globalData.loginCode,that.data.projectId).then(data => {
+    server.getVoteeList(that.data.projectId).then(data => {
       that.setData({
         voteeChart: data.voteeList
       })
@@ -84,9 +85,9 @@ Page({
     }
     if(that.data.editMode=='add'){
       //新增评分项
-      server.addSubject(app.globalData.loginCode,subject).then(function (data) {
+      server.addSubject(subject).then(function (data) {
         //从新查询并刷新页面
-        server.getSubjectList(app.globalData.loginCode,that.data.projectId).then(data => {
+        server.getSubjectList(that.data.projectId).then(data => {
           that.setData({
             subjectChart: data.subjectList,
             totalScore: data.totalScore
@@ -97,9 +98,9 @@ Page({
     }
     else{
       //更新该评分项
-      server.updateSubject(app.globalData.loginCode,subject).then(function (data) {
+      server.updateSubject(subject).then(function (data) {
         //从新查询并刷新页面
-        server.getSubjectList(app.globalData.loginCode,that.data.projectId).then(data => {
+        server.getSubjectList(that.data.projectId).then(data => {
           that.setData({
             subjectChart: data.subjectList,
             totalScore: data.totalScore
@@ -118,8 +119,9 @@ Page({
   },
   //删除评分项
   deleteSubject(e) {
+    var that=this;
     let subjectId = e.currentTarget.dataset.subject.id;
-    server.deleteSubject(app.globalData.loginCode,subjectId).then(data=>{
+    server.deleteSubject(subjectId).then(data=>{
       //从新查询并刷新页面
       server.getSubjectList(that.data.projectId).then(data => {
         that.setData({
@@ -166,9 +168,9 @@ Page({
     }
     //新增该被评人
     if(that.data.editMode=="add"){
-      server.addVotee(app.globalData.loginCode,votee).then(function (data) {
+      server.addVotee(votee).then(function (data) {
         //从新查询并刷新页面
-        server.getVoteeList(app.globalData.loginCode,that.data.projectId).then(data => {
+        server.getVoteeList(that.data.projectId).then(data => {
           that.setData({
             voteeChart: data.voteeList
           })
@@ -178,9 +180,9 @@ Page({
     }
     else{
       //更新该被评人
-      server.updateVotee(app.globalData.loginCode,votee).then(function (data) {
+      server.updateVotee(votee).then(function (data) {
         //从新查询并刷新页面
-        server.getVoteeList(app.globalData.loginCode,that.data.projectId).then(data => {
+        server.getVoteeList(that.data.projectId).then(data => {
           that.setData({
             voteeChart: data.voteeList
           })
@@ -198,10 +200,11 @@ Page({
   },
   //删除被评人
   deleteVotee(e) {
+    var that=this;
     let voteeId = e.currentTarget.dataset.votee.id;
-    server.deleteVotee(app.globalData.loginCode,voteeId).then(data => {
+    server.deleteVotee(voteeId).then(data => {
       //从新查询并刷新页面
-      server.getVoteeList(app.globalData.loginCode,that.data.projectId).then(data => {
+      server.getVoteeList(that.data.projectId).then(data => {
         that.setData({
           voteeChart: data.voteeList
         })
@@ -245,6 +248,17 @@ Page({
       util.navigateBack({
         url: 'pages/projectManage/projectManage',
       })
+  },
+  //某号输入框完成后，当前失焦，下个聚焦
+  inputConfirm: function (e) {
+    var that = this;
+    let inputIndex = e.currentTarget.dataset.index;
+    if (inputIndex == 0) {
+      that.setData({
+        inputIndex0: false,
+        inputIndex1: true,
+      })
+    }
   },
   //表单验证
   initValidate: function (e) {

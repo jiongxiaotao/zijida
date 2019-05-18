@@ -7,6 +7,15 @@
   border: 1px solid darkgray;
   box-sizing: border-box;
 }
+
+.chartContent button{
+  width: 100%;
+  margin-top: 30rpx;
+  background:white;  
+  color: #59e;
+  border: 1px #59e solid;
+  font-weight: bold;
+}
 .table{
   width: 100%;
   height: 80%;
@@ -58,23 +67,15 @@
     background:#59e;
 }
 
-.chartContent button{
-  width: 100%;
-  margin-top: 30rpx;
-  background:white;  
-  color: #59e;
-  border: 1px #59e solid;
-  font-weight: bold;
-}
 
 .popBox{
   position:absolute;
-  width:80%;
-  left:10%;
-  top:30%;
+  width:100%;
+  top:20%;
   padding: 30rpx 0;
   background: #cef;
 }
-.popBox button{
+.popBox button,.popBox input{
   margin-bottom: 20rpx;
+  width: 90%;
 }

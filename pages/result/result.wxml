@@ -1,9 +1,13 @@
 <view class="container">
   <view class='listContent' >
+    <view class='projectName'>{{curProject.name}}</view>
     <!--当前进度-->
+    <view class='listTitle'>评分状态：
+      <text class=' {{curProject.status=="9"?"":"orange"}}'>{{(curProject.status=='9')?"已终止":"进行中"}}</text>
+      </view>
     <view class='listTitle'>评分进度</view>
     <progress class="progress" percent="{{percent}}" stroke-width="30" activeColor="#59e" backgroundColor="rgba(110, 120, 126, 0.5)" border-radius="15" active="true" active-mode="forwards">
-    <view class='progressText'>{{doneAmount}}/{{amount}}</view>
+    <view class='progressText'>{{curProject.done_amount}}/{{curProject.amount}}</view>
     </progress>
     <view class='listTitle'>评分结果</view>
     <view class="tr th dark" >

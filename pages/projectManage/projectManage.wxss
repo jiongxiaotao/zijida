@@ -1,4 +1,10 @@
-
+.projectManageTip{
+  background: rgb(253, 124, 124);
+  color: white;
+  font-size:24rpx;
+  line-height: 40rpx;
+  text-align: center;
+}
 .listScroll{
   height: 100%;
 }
@@ -13,19 +19,40 @@
   margin: 0 10rpx;
   margin-top: 30rpx; 
 }
+.type_p{
+  background: #cef !important; 
+}
+.type_t{
+  background: lightgreen !important; 
+}
+.type_w{
+  background: pink !important; 
+}
 .listItem .textContent{
   display: inline-block;
-  width: 70%;
+  width: 90%;
   line-height: 60rpx;
 }
 .listItem .itemLabel{
   float: left;
   display: inline-block;
-  width: 35%;
+  width: 30%;
 }
 .listItem .itemText{
   display: inline-block;
-  width: 65%;
+  width: 70%;
+  font-weight: bold;
+  word-wrap: break-word;
+}
+.listItem .itemShortLabel{
+  float: left;
+  display: inline-block;
+  width: 20%;
+}
+.listItem .itemShortText{
+  display: inline-block;
+  float: left;
+  width: 30%;
   font-weight: bold;
   word-wrap: break-word;
 }
@@ -41,17 +68,31 @@
 .done{
   color:green;
 }
+.progress{
+  width: 60%;
+  line-height:40rpx;
+  float:left;
+  margin: 10rpx;
+}
+.progressText{
+  position:absolute;
+  display:inline-block;
+  left:48%;
+  margin-top:-20rpx;
+  color: orange;
+  font-weight: bold;
+}
 /* 一键复制 */
 .listItem .copy{
   height:100%;
   position:relative;
   top:0;
-  width:30%;
+  width:10%;
   float:right;
 }
 .listItem .copy image{
-  width: 120rpx;
-  height: 120rpx;
+  width: 60rpx;
+  height: 60rpx;
 }
 .listItem .copy text{
   height:20px;

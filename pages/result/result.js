@@ -8,9 +8,8 @@ const app = getApp()
 Page({
   data: {
     projectId:"0",  //项目id
+    curProject:{},//当前评分的项目
     resultList:[],//被评人表格
-    doneAmount:0,//已收集评分个数
-    amount:10,//总共需要收集评分个数
     percent:0,//进度百分比
     totalScore:0,//所有评分项总分
     resultDetailShow: false, //修改时弹出评分项模态编辑框
@@ -25,14 +24,8 @@ Page({
   onLoad: function (options) {
     var that=this;
     that.setData({
-      projectId: options.id ? options.id : "0"
+      projectId: options.id ? options.id : "0",
     })
-    //如果是已终止的项目，终止评分按钮不显示
-    if (options.status && options.status=="9"){
-      that.setData({
-        stopProjectHidden: true
-      })
-    }
     //如果是客户查看，没有高级和终止评分按钮
     if(options.fromUser=='cust'){
       that.setData({
@@ -41,13 +34,18 @@ Page({
       })
     }
     //根据项目编号查评分的所有评分项
-    server.getResult(app.globalData.loginCode,that.data.projectId).then(data=>{
+    server.getResult(that.data.projectId).then(data=>{
+      //如果是已终止的项目，终止评分按钮不显示
+      if (data.project.status == "9") {
+        that.setData({
+          stopProjectHidden: true
+        })
+      }
       that.setData({
+        curProject:data.project,
         resultList: data.results,
         totalScore: data.totalScore,
-        doneAmount: data.doneAmount,
-        amount:data.amount,
-        percent:parseInt(data.doneAmount / data.amount*100)
+        percent: parseInt(data.project.done_amount / data.project.amount*100)
       })
     })
   },
@@ -186,10 +184,8 @@ Page({
       success: function (res) {
         if (res.confirm) {
           console.log('项目终止评分')
-          let project={
-            id:that.data.projectId,
-            status:"9"
-          }
+          let project=that.data.curProject;
+          project.status="9";
           server.updateProject(project).then(() => {
             console.log('更新为终止评分状态');
             //设置按钮不可用

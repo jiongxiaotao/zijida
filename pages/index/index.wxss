@@ -65,8 +65,11 @@
 }
 #inviteCode{
   margin-bottom: 60rpx;
+  width: 90%;
 }
-
+.submit{
+  width: 90%;
+}
 .weatherInfo{
   position:absolute;
   right:40rpx;

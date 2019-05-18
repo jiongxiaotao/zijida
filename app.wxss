@@ -55,7 +55,6 @@
 }
 /* 输入框样式 */
 input{
-  width:90%;
   line-height:70px;
   height:70rpx;
   border:1px solid #6af;
@@ -71,9 +70,9 @@ input{
 button{
   padding: 0;
   color: white;
-  width: 90%;
   line-height: 80rpx;
   background: #59e;
+  width:97%;
 }
 button:hover{
   color: white;

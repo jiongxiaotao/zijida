@@ -37,7 +37,7 @@
       id='inviteCode' 
       name='inviteCode'
       maxlength='16'></input>
-    <button form-type='submit' >进入评分</button>
+    <button form-type='submit' class='submit'>进入评分</button>
   </form>
     
     <!-- <button bindtap='testOCR' data-side="front">测试证件OCR识别正面</button>

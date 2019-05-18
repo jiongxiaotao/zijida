@@ -7,6 +7,7 @@
       {{item}}
     </view>
   </view>
+  <view class='projectManageTip'>您一共可建立{{projectManageInfo.maxCount}}个项目，当前已使用{{projectManageInfo.curCount}}个</view>
   <!-- 选择器-->
   
   <!--正在评分-->
@@ -14,14 +15,14 @@
     scroll-y 
     hidden="{{currentTab !== 0}}" id="doingList" class='listScroll'>
     <view class='list'> 
-      <view class="listItem" wx:for="{{doingList}}" data-status="{{item.status}}" >
+      <view class="listItem type_{{item.type}}" wx:for="{{doingList}}" data-status="{{item.status}}" >
         <view class='textContent'>
           <!-- 选择框，不同状态的可选项不同 -->
           <picker bindchange="chooseOperMenu" 
           data-project="{{item}}" 
           value="0" 
           range="{{operMenu[item.status]}}">
-            <view>
+            <view style='font-size:36rpx;'>
               <view class='itemLabel'>
                 <label for="name_{{item.id}}">项目名称:</label>
               </view>
@@ -29,15 +30,7 @@
                 <text id="name_{{item.id}}">{{item.name}}</text>
               </view>
             </view>
-            <view>
-              <view class='itemLabel'>
-                <label for="status_{{item.id}}">项目状态:</label>
-              </view>
-              <view class='itemText'>
-                <text id="status_{{item.id}}" class='{{filter.publishStatusClassFilter(item.status)}}'>{{filter.publishStatusFilter(item.status)}}</text>
-              </view>
-            </view>
-            <view>
+            <view style='font-size:36rpx;'>
               <view class='itemLabel'>
                 <label for="inviteCode_{{item.id}}">邀请码:</label>
               </view>
@@ -45,19 +38,36 @@
                 <text id="inviteCode_{{item.id}}" >{{item.invite_code}}</text>
               </view>
             </view>
+            <view style='font-size:28rpx;'>
+              <view class='itemShortLabel'>
+                <label for="name_{{item.id}}">项目类型:</label>
+              </view>
+              <view class='itemShortText'>
+                <text id="type_{{item.id}}">{{filter.projectTypeFilter(item.type)}}</text>
+              </view>
+              <view class='itemShortLabel'>
+                <label for="status_{{item.id}}">项目状态:</label>
+              </view>
+              <view class='itemShortText'>
+                <text id="status_{{item.id}}" class='{{filter.publishStatusClassFilter(item.status)}}'>{{filter.publishStatusFilter(item.status)}}</text>
+              </view>
+            </view>
             <view>
               <view class='itemLabel'>
                 <label for="progress_{{item.id}}">当前进度:</label>
               </view>
-              <view class='itemText'>
+              <progress class="progress" percent="{{parseInt(item.done_amount / item.amount*100)}}" stroke-width="20" activeColor="#59e" backgroundColor="darkblue" border-radius="10" active="true">
+                <view class='progressText'>{{item.done_amount}}/{{item.amount}}</view>
+              </progress>
+              <!-- <view class='itemText'>
                 <text id="progress_{{item.id}}" class="{{item.done_amount ==item.amount ? 'done':'scoring'}}">{{item.done_amount}}/{{item.amount}}</text>
-              </view>
+              </view> -->
             </view>
             
           </picker>
         </view>
         <!-- 一键复制 -->
-        <view id="copy_{{item.id}}" class='copy' bindtap='copy'>
+        <view id="copy_{{item.id}}" class='copy' data-project="{{item}}" bindtap='copy'>
           <image src="/pages/img/icon_copy.png"></image>
           <text>一键复制</text>
         </view>
@@ -101,5 +111,5 @@
       </view>
     </view>
   </scroll-view>
-  <button class='addProject' id="addProject" bindtap='goAddProject'>新建评分项目</button> 
+  <button class='addProject' id="addProject" bindtap='goAddProject'>新建项目</button> 
 </view>

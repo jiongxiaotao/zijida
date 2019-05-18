@@ -1,4 +1,15 @@
 //项目发布状态，数字转中文
+function projectTypeFilter(type) {
+  switch (type) {
+    case "p":
+      return "评分类";
+    case "w":
+      return "问卷类";
+    case "t":
+      return "投票类";
+  }
+}
+//项目发布状态，数字转中文
 function publishStatusFilter(status){
   switch(status.toString()){
     case "0":
@@ -26,6 +37,7 @@ function publishStatusClassFilter(status) {
 }
 
 module.exports = {
+  projectTypeFilter: projectTypeFilter,
   publishStatusFilter: publishStatusFilter,
   publishStatusClassFilter: publishStatusClassFilter
 }

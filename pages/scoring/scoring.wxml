@@ -1,8 +1,9 @@
 <view class="container">
   <view class='listContent' >
+    <view class='projectName'>{{scoringProject.name}}</view>
     <!--当前进度-->
-    <view class='listTitle' hidden='{{!projectEditable}}'>请为每位被评人评分</view>
-    <view class='listTitle' hidden='{{projectEditable}}'>评分表预览</view>
+    <view class='listTitle' hidden='{{scoringProject.status!="2"}}'>请为每位被评人评分</view>
+    <view class='listTitle' hidden='{{scoringProject.status=="2"}}'>评分表预览(暂未开放评分)</view>
     <view class="tr th dark" >
       <view class="td scoringName">被评人</view>
       <view class="td scoringScore">得分/{{totalScore}}</view>
@@ -27,7 +28,7 @@
   </view>
     
   <view>
-    <button bindtap='submitScoring' hidden='{{!projectEditable}}'
+    <button bindtap='submitScoring' hidden='{{scoringProject.status!="2"}}'
     >提交评分</button>
   </view>
 </view>
@@ -36,17 +37,18 @@
   <view class="popBox">
     <form bindsubmit='saveScoreSheet'>
       <scroll-view scroll-y style='height:76%;'>
-      <block wx:for="{{scoreSheet}}" wx:for-item="subject" >
-        <input type="text" 
+      <block wx:for="{{scoreSheet}}" wx:for-item="subject" wx:for-index="input_index" >
+        <input type="number" 
         placeholder='{{subject.name}},满分{{subject.max_score}}' 
         name="subject_{{subject.id}}" 
         value="{{subject.score}}"
         maxlength='10'
-        data-subject="{{subject}}" />
+        data-subject="{{subject}}"
+        />
       </block>
       </scroll-view>
       <button style='margin-top:40rpx;' form-type='submit'  type="success"
-      disabled="{{!projectEditable}}">保存</button>
+      disabled='{{scoringProject.status!="2"}}'>保存</button>
       <button class="btn btn-cancle" type="default" bindtap="closeScoreSheet">取消</button>
     </form>
     

@@ -7,6 +7,17 @@
   border: 1px solid darkgray;
   box-sizing: border-box;
 }
+.projectName{
+  width:100%;
+  margin: 40rpx auto;
+  text-align: center;
+  font-size: 40rpx;
+  color: rgb(4, 77, 167);
+  font-weight: bold;
+}
+.orange{
+  color:orange;
+}
 .listTitle{
   margin: 20rpx 0 10rpx 0;
 }
@@ -15,7 +26,8 @@
   display:inline-block;
   left:48%;
   margin-top:-20rpx;
-
+  color: orange;
+  font-weight: bold;
 }
 .table{
   width: 100%;

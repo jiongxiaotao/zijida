@@ -259,7 +259,8 @@ Page({
     //非空校验
     if(inviteCode){
       //根据邀请码查询项目状态
-      server.getProjectByInviteCode(app.globalData.loginCode,inviteCode).then(function (data) {
+      server.getProjectByInviteCode(inviteCode).then(function (data) {
+        wx.setStorageSync("scoringProject", data);
         //已终止，或当前用户已对项目进行打分，直接进入看结果页面
         if (data.status == 9 || data.curUserDone)
           wx.navigateTo({

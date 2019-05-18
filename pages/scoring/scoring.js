@@ -6,22 +6,22 @@ const app = getApp()
 Page({
   data: {
     projectId: 0,  //项目id
-    projectEditable:true,//项目状态是否可以评分
+    scoringProject: {},//当前评分的项目，从storage获取
     totalScore: 0,//所有评分项总分
     voteeList: [],//被评人及当前评分表格
     subjectList:[], //评分项列表，用于初始化单人评分表
     curScoring:{},//当前操作的被评人情况
     scoreSheet: [],//单人评分表
-    scoringDetailShow: false //修改时弹出评分项模态编辑框
+    scoringDetailShow: false, //修改时弹出评分项模态编辑框
   },
   onLoad: function (options) {
     var that = this;
     that.setData({
       projectId: options.id ? options.id :0,
-      projectEditable: options.status==2? true:false
+      scoringProject: wx.getStorageSync("scoringProject")
     })
     //根据项目编号查评分的所有被评人，初始化当前用户给他打的分数
-    server.getVoteeList(app.globalData.loginCode,that.data.projectId).then(voteeData => {
+    server.getVoteeList(that.data.projectId).then(voteeData => {
       //加载本地缓存，显示个人评分情况
       var voteeList=voteeData.voteeList;
      
@@ -43,11 +43,11 @@ Page({
       })
     })
     //获取所有评分项，初始化每项分数
-    server.getSubjectList(app.globalData.loginCode,that.data.projectId).then(subjectData => {
+    server.getSubjectList(that.data.projectId).then(subjectData => {
       var subjectList = subjectData.subjectList;
       that.setData({
         subjectList: subjectList,
-        totalScore: subjectData.totalScore
+        totalScore: subjectData.totalScore,
       })
       //表单校验
       that.initValidate();
@@ -189,7 +189,7 @@ Page({
         success: function (res) {
           if (res.confirm) {
             console.log('提交评分')
-            server.submitProjectScore(app.globalData.loginCode, that.data.projectId, that.getAllScoreSheetInStorage()).then(() => {
+            server.submitProjectScore(that.data.projectId, that.getAllScoreSheetInStorage()).then(() => {
               console.log('已提交评分');
               //清空每个scoresheet的storage缓存
               for(var i=0;i<that.data.voteeList.length;i++){
@@ -206,6 +206,7 @@ Page({
     }
     
   },
+  
   //表单验证
   initValidate: function () {
     var that=this;

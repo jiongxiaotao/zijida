@@ -1,7 +1,7 @@
 var util = require('util.js');
 var config = require('config.js');
 var encrypt = require('encrypt.js')
-
+const app = getApp()
 //获取unionId
 function getOpenId(code,) {
   return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ function getOpenId(code,) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:获取用户编号',
           showCancel: false,
           confirmText: '确认'
         })
@@ -44,6 +44,7 @@ function queryUserInfo(loginCode) {
     util.ajax({
       url: "miniQueryUserInfo?loginCode=" +  loginCode,
       success: data => {
+        console.log("查询用户信息正常"+JSON.stringify(data));
         //返回的userInfoList有数据
         if (data.BK_STATUS == "00") {
           resolve(data);
@@ -53,12 +54,14 @@ function queryUserInfo(loginCode) {
         }
       },
       fail: data =>{
-        wx.showModal({
-          title: '错误',
-          content: '系统暂不可用!!!',
-          showCancel: false,
-          confirmText: '确认'
-        })
+        reject();
+        // console.log("查询用户信息失败" + JSON.stringify(data));
+        // wx.showModal({
+        //   title: '错误',
+        //   content: '系统暂不可用:查询用户信息',
+        //   showCancel: false,
+        //   confirmText: '确认'
+        // })
       }
     })
   })
@@ -87,7 +90,7 @@ function updateUserInfo(loginCode,jsonData, succ) {
       fail: data => {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:保存用户信息',
           showCancel: false,
           confirmText: '确认'
         })
@@ -119,7 +122,7 @@ function frSign(succ) {
       fail: data => {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:生成签名',
           showCancel: false,
           confirmText: '确认'
         })
@@ -193,48 +196,10 @@ function getBaiduFRResult(sessionCode,videoPath) {
     })
   })
 }
-//上传文件
-function uploadFile(fileName, picStr, succ){
-  return new Promise((resolve, reject) => {
-    var that = this;
-    var path = "/home/ap/share/file/input/ynt/"+ fileName;//老的共享地址
-    util.ajax({
-      data: {
-        _fw_service_id: 'imageTransService',
-        jsonData: {
-          path: path,
-          picStr: picStr
-        }
-      },
-      success: function (data) {
-        if (data && data.BK_STATUS == "00") {
-          if (succ) {
-            succ();
-          }
-        } else {
-          wx.showModal({
-            title: '错误',
-            content: '上传失败!!!',
-            showCancel: false,
-            confirmText: '确认'
-          })
-        }
-      },
-      fail: function () {
-        wx.showModal({
-          title: '错误',
-          content: '上传失败!!!',
-          showCancel: false,
-          confirmText: '确认'
-        })
-      }
-    })
-  })
-}
 
 //查询本人负责的项目列表 queryProjectList
-function getProjectList(loginCode, statusList) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function getProjectList(statusList) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url:"getProjectList?loginCode="+loginCode+"&statusList="+statusList,
@@ -260,7 +225,7 @@ function getProjectList(loginCode, statusList) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:查询项目列表',
           showCancel: false,
           confirmText: '确认'
         })
@@ -269,8 +234,8 @@ function getProjectList(loginCode, statusList) {
   })
 }
 //新增评分项目 addProject
-function addProject(loginCode, project) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function addProject(project) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "addProject?loginCode=" + loginCode,
@@ -298,7 +263,7 @@ function addProject(loginCode, project) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:新增项目',
           showCancel: false,
           confirmText: '确认'
         })
@@ -308,8 +273,8 @@ function addProject(loginCode, project) {
   })
 }
 //更新评分项目 updateProject
-function updateProject(loginCode,project) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function updateProject(project) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "updateProject?loginCode=" + loginCode,
@@ -337,7 +302,7 @@ function updateProject(loginCode,project) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:更新项目',
           showCancel: false,
           confirmText: '确认'
         })
@@ -347,8 +312,8 @@ function updateProject(loginCode,project) {
   })
 }
 //删除评分项目 deleteProject
-function deleteProject(loginCode,projectId) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function deleteProject(projectId) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "deleteProject?loginCode=" + loginCode + "&projectId=" + projectId,
@@ -374,7 +339,7 @@ function deleteProject(loginCode,projectId) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:删除项目',
           showCancel: false,
           confirmText: '确认'
         })
@@ -383,9 +348,9 @@ function deleteProject(loginCode,projectId) {
 
   })
 }
-//获取管理员最多可以负责多少个项目 getProjectMaxCount
-function getProjectManage(loginCode){
-  loginCode = encodeURIComponent(loginCode); //编码
+//获取管理员最多可以负责多少个项目
+function getProjectManage(){
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "getProjectManage?loginCode=" + loginCode,
@@ -411,7 +376,7 @@ function getProjectManage(loginCode){
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:获取项目管理',
           showCancel: false,
           confirmText: '确认'
         })
@@ -421,8 +386,8 @@ function getProjectManage(loginCode){
   })
 }
 //查询某项目的评分项
-function getSubjectList(loginCode,projectId) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function getSubjectList(projectId) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "getSubjectList?loginCode=" + loginCode + "&projectId=" + projectId,
@@ -448,7 +413,7 @@ function getSubjectList(loginCode,projectId) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:获取评分项列表',
           showCancel: false,
           confirmText: '确认'
         })
@@ -457,8 +422,8 @@ function getSubjectList(loginCode,projectId) {
   })
 }
 //更新某项目的某评分项
-function addSubject(loginCode,subject) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function addSubject(subject) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "addSubject?loginCode=" + loginCode,
@@ -486,7 +451,7 @@ function addSubject(loginCode,subject) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:新增评分项',
           showCancel: false,
           confirmText: '确认'
         })
@@ -495,8 +460,8 @@ function addSubject(loginCode,subject) {
   })
 }
 //更新某项目的某评分项
-function updateSubject(loginCode,subject) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function updateSubject(subject) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "updateSubject?loginCode=" + loginCode,
@@ -524,7 +489,7 @@ function updateSubject(loginCode,subject) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:更新评分项',
           showCancel: false,
           confirmText: '确认'
         })
@@ -533,8 +498,8 @@ function updateSubject(loginCode,subject) {
   })
 }
 //删除评分项 deleteSubject
-function deleteSubject(loginCode, subjectId) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function deleteSubject(subjectId) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "deleteSubject?loginCode=" + loginCode + "&subjectId=" + subjectId,
@@ -560,7 +525,7 @@ function deleteSubject(loginCode, subjectId) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:删除评分项',
           showCancel: false,
           confirmText: '确认'
         })
@@ -570,8 +535,8 @@ function deleteSubject(loginCode, subjectId) {
   })
 }
 //查询某项目的被评人
-function getVoteeList(loginCode,projectId) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function getVoteeList(projectId) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "getVoteeList?loginCode=" + loginCode + "&projectId=" + projectId,
@@ -597,7 +562,7 @@ function getVoteeList(loginCode,projectId) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:获取被评人列表',
           showCancel: false,
           confirmText: '确认'
         })
@@ -606,8 +571,8 @@ function getVoteeList(loginCode,projectId) {
   })
 }
 //新增某项目的被评人
-function addVotee(loginCode,votee) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function addVotee(votee) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "addVotee?loginCode=" + loginCode,
@@ -635,7 +600,7 @@ function addVotee(loginCode,votee) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:新增被评人',
           showCancel: false,
           confirmText: '确认'
         })
@@ -644,8 +609,8 @@ function addVotee(loginCode,votee) {
   })
 }
 //更新某项目的被评人
-function updateVotee(loginCode,votee) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function updateVotee(votee) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "updateVotee?loginCode=" + loginCode,
@@ -673,7 +638,7 @@ function updateVotee(loginCode,votee) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:更新被评人',
           showCancel: false,
           confirmText: '确认'
         })
@@ -681,9 +646,9 @@ function updateVotee(loginCode,votee) {
     })
   })
 }
-//删除评分项 deleteSubject
-function deleteVotee(loginCode,voteeId) {
-  loginCode = encodeURIComponent(loginCode); //编码
+//删除被评人 deleteVotee
+function deleteVotee(voteeId) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "deleteVotee?loginCode=" + loginCode + "&voteeId=" + voteeId,
@@ -709,7 +674,7 @@ function deleteVotee(loginCode,voteeId) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:删除被评人',
           showCancel: false,
           confirmText: '确认'
         })
@@ -718,8 +683,8 @@ function deleteVotee(loginCode,voteeId) {
   })
 }
 //根据邀请码查询项目状态
-function getProjectByInviteCode(loginCode,inviteCode){
-  loginCode = encodeURIComponent(loginCode); //编码
+function getProjectByInviteCode(inviteCode){
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve,reject)=>{
     util.ajax({
       url: "getProjectByInviteCode?loginCode=" + loginCode + "&inviteCode=" + inviteCode,
@@ -745,7 +710,7 @@ function getProjectByInviteCode(loginCode,inviteCode){
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:查询项目详情',
           showCancel: false,
           confirmText: '确认'
         })
@@ -754,8 +719,8 @@ function getProjectByInviteCode(loginCode,inviteCode){
   })
 }
 //提交某项目的所有评分
-function submitProjectScore(loginCode,projectId,scoreList){
-  loginCode = encodeURIComponent(loginCode); //编码
+function submitProjectScore(projectId,scoreList){
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "submitProjectScore?loginCode=" + loginCode + "&projectId=" + projectId,
@@ -783,7 +748,7 @@ function submitProjectScore(loginCode,projectId,scoreList){
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:提交评分',
           showCancel: false,
           confirmText: '确认'
         })
@@ -792,8 +757,8 @@ function submitProjectScore(loginCode,projectId,scoreList){
   })
 }
 //查询某项目的评分结果（包括实时）
-function getResult(loginCode,projectId) {
-  loginCode = encodeURIComponent(loginCode); //编码
+function getResult(projectId) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "getResult?loginCode=" + loginCode + "&projectId=" + projectId,
@@ -819,7 +784,7 @@ function getResult(loginCode,projectId) {
       fail: function (data) {
         wx.showModal({
           title: '错误',
-          content: '系统暂不可用!!!',
+          content: '系统暂不可用:查询评分结果',
           showCancel: false,
           confirmText: '确认'
         })
@@ -834,7 +799,6 @@ module.exports = {
   frSign: frSign,
   getBaiduFRSessionCode: getBaiduFRSessionCode,
   getBaiduFRResult: getBaiduFRResult,
-  uploadFile: uploadFile,
   getProjectList: getProjectList,
   addProject: addProject,
   updateProject: updateProject,
@@ -843,9 +807,11 @@ module.exports = {
   getSubjectList: getSubjectList,
   addSubject: addSubject,
   updateSubject: updateSubject,
+  deleteSubject:deleteSubject,
   getVoteeList: getVoteeList,
   addVotee: addVotee,
   updateVotee: updateVotee,
+  deleteVotee: deleteVotee,
   getProjectByInviteCode:getProjectByInviteCode,
   submitProjectScore: submitProjectScore,
   getResult: getResult

@@ -10,6 +10,7 @@ Page({
     currentTab: 0, //导航栏当前选中项
     doingList: [], //正在打分的项目
     doneList: [], //已打分的项目
+    projectManageInfo:{},//项目管理情况
     operMenu: { //项目点击时操作项
       "0": ["项目设置", "编辑评分内容", "发布", "删除项目"],  //未发布--项目设置，编辑评分内容;发布
       "1": ["项目设置", "编辑评分内容", "开放评分", "删除项目"],//已发布--项目设置;编辑评分内容；开放评分
@@ -24,6 +25,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -37,11 +39,17 @@ Page({
   onShow: function () {
     var that = this;
     //查询正在评分的项目列表
-    server.getProjectList(app.globalData.loginCode, "0,1,2").then(data => {
+    server.getProjectList("0,1,2").then(data => {
       //数据实时渲染
       that.setData({
         doingList: data.projectList
       });
+    })
+    //查看用户可维护的项目情况
+    server.getProjectManage().then(data => {
+      that.setData({
+        projectManageInfo:data
+      })
     })
   },
   //响应点击导航栏
@@ -52,7 +60,7 @@ Page({
     });
     //切换导航栏时，查询对应数据
     let statusCodes=(that.data.currentTab==1)?"9":"0,1,2";
-    server.getProjectList(app.globalData.loginCode, statusCodes).then(data => {
+    server.getProjectList(statusCodes).then(data => {
       //已完成数据渲染
       if(that.data.currentTab==1)
         that.setData({
@@ -68,23 +76,35 @@ Page({
   //根据项目状态弹出对应的可操作菜单
   chooseOperMenu: function (e) {
     var that = this;
-    let curProject=e.currentTarget.dataset.project;//获取当前操作的项目
+    let editingProject=e.currentTarget.dataset.project;//获取当前操作的项目
     //let idx = e.currentTarget.dataset.itemIndex;//页面展示的位置
-    wx.setStorageSync("curProject", curProject);
+    wx.setStorageSync("editingProject", editingProject);
     //未发布--项目设置，编辑评分内容
-    if (curProject.status == "0") {
+    if (editingProject.status == "0") {
       //编辑
       if (e.detail.value == '0') {
         console.log("未发布--项目设置");
         wx.navigateTo({
-          url: '../editProject/editProject?type=edit&id=' + curProject.id,
+          url: '../editProject/editProject?type=edit&id=' + editingProject.id,
         })
       }
       else if (e.detail.value == '1') {
         console.log("未发布--编辑评分内容");
-        wx.navigateTo({
-          url: '../editChart/editChart?id=' + curProject.id,
-        })
+        //评分类跳转
+        if (editingProject.type == 'p')
+          wx.navigateTo({
+            url: '../editPingfenChart/editPingfenChart?id=' + editingProject.id,
+          })
+        //投票类跳转
+        else if (editingProject.type == 't')
+          wx.navigateTo({
+            url: '../editToupiaoChart/editToupiaoChart?id=' + editingProject.id,
+          })
+        //问卷类跳转
+        else
+          wx.navigateTo({
+            url: '../editWenjuanChart/editWenjuanChart?id=' + editingProject.id,
+          })
       }
 
       else if (e.detail.value == '2') {
@@ -98,8 +118,8 @@ Page({
           success: function (res) {
             if (res.confirm) {
               console.log('调用项目发布接口')
-              curProject.status=1;
-              server.updateProject(app.globalData.loginCode, curProject).then(() => {
+              editingProject.status=1;
+              server.updateProject(editingProject).then(() => {
                 console.log('更新为开放评分状态')
                 that.refreshList();
               })
@@ -119,9 +139,15 @@ Page({
           success: function (res) {
             if (res.confirm) {
               //删除
-              server.deleteProject(app.globalData.loginCode,curProject.id).then(() => {
+              server.deleteProject(editingProject.id).then(() => {
                 console.log('项目已删除')
                 that.refreshList();
+                //查看用户可维护的项目情况
+                server.getProjectManage().then(data => {
+                  that.setData({
+                    projectManageInfo: data
+                  })
+                })
               })
             }
           }
@@ -129,18 +155,30 @@ Page({
       }
     }
     //已发布--项目设置;编辑评分内容；开放评分
-    else if (curProject.status == "1") {
+    else if (editingProject.status == "1") {
       if (e.detail.value == '0') {
         console.log("已发布--项目设置");
         wx.navigateTo({
-          url: '../editProject/editProject?type=edit&id=' + curProject.id,
+          url: '../editProject/editProject?type=edit&id=' + editingProject.id,
         })
       }
       else if (e.detail.value == '1') {
         console.log("已发布--编辑评分内容");
-        wx.navigateTo({
-          url: '../editChart/editChart?id=' + curProject.id,
-        })
+        //评分类跳转
+        if (editingProject.type == 'p')
+          wx.navigateTo({
+            url: '../editPingfenChart/editPingfenChart?id=' + editingProject.id,
+          })
+        //投票类跳转
+        else if (editingProject.type == 't')
+          wx.navigateTo({
+            url: '../editToupiaoChart/editToupiaoChart?id=' + editingProject.id,
+          })
+        //问卷类跳转
+        else
+          wx.navigateTo({
+            url: '../editWenjuanChart/editWenjuanChart?id=' + editingProject.id,
+          })
       }
       else if (e.detail.value == '2') {
         console.log("已发布--开放评分");
@@ -153,8 +191,8 @@ Page({
           success: function (res) {
             if (res.confirm) {
               console.log('项目开放评分')
-              curProject.status = 2;
-              server.updateProject(app.globalData.loginCode,curProject).then(()=>{
+              editingProject.status = 2;
+              server.updateProject(editingProject).then(()=>{
                 console.log('更新为开放评分状态')
                 that.refreshList();
               })
@@ -174,9 +212,15 @@ Page({
           success: function (res) {
             if (res.confirm) {
               //删除
-              server.deleteProject(app.globalData.loginCode,curProject.id).then(() => {
+              server.deleteProject(editingProject.id).then(() => {
                 console.log('项目已删除')
                 that.refreshList();
+                //查看用户可维护的项目情况
+                server.getProjectManage().then(data => {
+                  that.setData({
+                    projectManageInfo: data
+                  })
+                })
               })
             }
           }
@@ -184,11 +228,11 @@ Page({
       }
     }
     //已开放评分--查看实时评分；终止评分；转发二维码
-    else if (curProject.status == "2") {
+    else if (editingProject.status == "2") {
       if (e.detail.value == '0') {
         console.log("已开放评分--查看实时评分");
         wx.navigateTo({
-          url: '../result/result?id=' + curProject.id + "&status=" + curProject.status,
+          url: '../result/result?id=' + editingProject.id + "&status=" + editingProject.status,
         })
       }
       else if (e.detail.value == '1') {
@@ -202,8 +246,8 @@ Page({
           success: function (res) {
             if (res.confirm) {
               console.log('项目终止评分')
-              curProject.status =9 ;
-              server.updateProject(app.globalData.loginCode,curProject).then(() => {
+              editingProject.status =9 ;
+              server.updateProject(editingProject).then(() => {
                 that.refreshList();
               })
             }
@@ -216,7 +260,7 @@ Page({
       if (e.detail.value == '0') {
         console.log("已结束--查看结果");
         wx.navigateTo({
-          url: '../result/result?id=' + curProject.id + "&status=" + curProject.status,
+          url: '../result/result?id=' + editingProject.id + "&status=" + editingProject.status,
         })
       }
     }
@@ -231,7 +275,7 @@ Page({
   refreshList:function(){
     var that=this;
     //查询正在评分的项目列表
-    server.getProjectList(app.globalData.loginCode, "0,1,2").then(data => {
+    server.getProjectList("0,1,2").then(data => {
       //数据实时渲染
       that.setData({
         doingList: data.projectList
@@ -241,43 +285,45 @@ Page({
   //拷贝项目，复制该项目的评分内容，重置项目状态
   copy(e){
     var that=this;
-    wx.showModal({
-      title: '提示',
-      content: '新项目的评分内容与原项目保持一致，并重置项目状态为未发布，原项目不受影响，确认复制？',
-      showCancel: true,
-      cancelText: "取消",
-      confirmText: '确认',
-      success: function (res) {
-        if (res.confirm) {
-          //先查询该用户是否已经达到最大使用限度
-          server.getProjectMaxCount(app.globalData.loginCode).then(data => {
-            if(data.canAdd){
-              console.log('可以复制');
-              let curProject = e.currentTarget.dataset.project;//获取当前操作的项目
-              server.addProject(app.globalData.loginCode,curProject).then(function (data) {
-                console.log("复制成功id=" + data.id);
+    if (that.data.projectManageInfo.canAdd) {
+      console.log('可以复制');
+      wx.showModal({
+        title: '提示',
+        content: '新项目的评分内容与原项目保持一致，并重置项目状态为未发布，原项目不受影响，确认复制？',
+        showCancel: true,
+        cancelText: "取消",
+        confirmText: '确认',
+        success: function (res) {
+          if (res.confirm) {
+            let editingProject = e.currentTarget.dataset.project;//获取当前操作的项目
+            server.addProject(editingProject).then(function (data) {
+              console.log("复制成功id=" + data.id);
+              that.refreshList();
+              //查看用户可维护的项目情况
+              server.getProjectManage().then(data => {
+                that.setData({
+                  projectManageInfo: data
+                })
               })
-            }
-            else{
-              wx.showModal({
-                title: '提示',
-                content: '已达到最大项目个数，无法新增！',
-                showCancel: false,
-                confirmText: '确认'
-              })
-            }
-            
-          })
-          
+            })
+          }
         }
-      }
-    })
+      })
+    }
+    else {
+      wx.showModal({
+        title: '提示',
+        content: '已达到最大项目个数，无法新增！',
+        showCancel: false,
+        confirmText: '确认'
+      })
+    }
   },
   //已完成的点击直接查看结果
   goResult:function(e){
-    let curProject = e.currentTarget.dataset.project;//获取当前操作的项目
+    let editingProject = e.currentTarget.dataset.project;//获取当前操作的项目
     wx.navigateTo({
-      url: '../result/result?id=' + curProject.id + "&status=" + curProject.status,
+      url: '../result/result?id=' + editingProject.id + "&status=" + editingProject.status,
     })
   }
 })

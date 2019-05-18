@@ -1,3 +1,4 @@
+<wxs module="filter" src="../filter/filter.wxs"></wxs>
 <view class="container">
   <view class='textContent'>
     <form bindsubmit='save'>
@@ -13,8 +14,17 @@
           confirm-hold='true'
           focus='{{inputIndex0}}'
           bindconfirm='inputConfirm'
-          value="{{curProject.name}}"
+          value="{{editingProject.name}}"
           ></input>
+      </view>
+      <view class='itemText'>
+        <picker
+          range="{{typeDesc}}"
+          bindchange="typeChange"
+        >
+          <view class="pickerText">项目类型: {{filter.projectTypeFilter(editingProject.type)}}</view>
+          <view class='pickerTip'>点击修改</view>
+        </picker>
       </view>
       <view class='itemText'>
         <input id="invite_code" 
@@ -28,7 +38,7 @@
           confirm-hold='true'
           focus='{{inputIndex1}}'
           bindconfirm='inputConfirm'
-          value="{{curProject.invite_code}}"
+          value="{{editingProject.invite_code}}"
           ></input>
       </view>
       <view class='itemText'>
@@ -42,7 +52,7 @@
           confirm-type='done'
           confirm-hold='false'
           focus='{{inputIndex2}}'
-          value="{{curProject.amount}}"
+          value="{{editingProject.amount}}"
           ></input>
       </view>
       <button form-type='submit'>保存</button>

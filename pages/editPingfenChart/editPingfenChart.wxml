@@ -88,11 +88,24 @@
     <form bindsubmit='saveSubject'>
       <input type="text" 
       placeholder='请输入评分项名称' 
-      name="name" value="{{editSubject.name}}" 
-      maxlength='12'/>
-      <input type="text" placeholder='请输入评分项分值' 
-      name="max_score" value="{{editSubject.max_score}}" 
-      maxlength='5'/>
+      name="name" 
+      value="{{editSubject.name}}" 
+      data-index='0'
+      confirm-type='next'
+      confirm-hold='true'
+      focus='{{inputIndex0}}'
+      maxlength='12'
+      bindconfirm='inputConfirm' />
+      <input type="number" 
+      placeholder='请输入评分项分值' 
+      name="max_score" 
+      value="{{editSubject.max_score}}" 
+      data-index='1'
+      confirm-type='done'
+      confirm-hold='true'
+      focus='{{inputIndex1}}'
+      maxlength='5'
+      bindconfirm='inputConfirm' />
       <button style='margin-top:40rpx;' form-type='submit' type="success">保存</button>
       <button type="default" bindtap="closeSubjectModel">取消</button>
     </form>

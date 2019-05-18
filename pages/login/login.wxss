@@ -23,8 +23,9 @@
     margin-top: 40rpx;
 }
  
-.bottom {
+.botton {
     border-radius: 80rpx;
-    margin: 70rpx 50rpx;
+    margin: 70rpx auto;
     font-size: 35rpx;
+    width: 90%;
 }
