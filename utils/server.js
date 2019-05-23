@@ -385,6 +385,45 @@ function getProjectManage(){
 
   })
 }
+//复制项目 连同项目的评分项+被评人
+function copyProject(project) {
+  const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
+  return new Promise((resolve, reject) => {
+    util.ajax({
+      url: "copyProject?loginCode=" + loginCode,
+      method: "POST",
+      data: JSON.stringify(project),
+      success: function (data) {
+        if (data.BK_STATUS == "00") {
+          console.log(data);
+          resolve(data);
+        }
+        else {
+          wx.showModal({
+            title: '错误',
+            content: data.BK_DESC,
+            showCancel: false,
+            confirmText: '确认',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('该退出的！')
+              }
+            }
+          })
+        }
+      },
+      fail: function (data) {
+        wx.showModal({
+          title: '错误',
+          content: '系统暂不可用:复制项目',
+          showCancel: false,
+          confirmText: '确认'
+        })
+      }
+    })
+
+  })
+}
 //查询某项目的评分项
 function getSubjectList(projectId) {
   const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
@@ -804,6 +843,7 @@ module.exports = {
   updateProject: updateProject,
   deleteProject: deleteProject,
   getProjectManage: getProjectManage,
+  copyProject: copyProject,
   getSubjectList: getSubjectList,
   addSubject: addSubject,
   updateSubject: updateSubject,

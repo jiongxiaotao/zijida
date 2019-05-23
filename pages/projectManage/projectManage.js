@@ -1,4 +1,5 @@
 var server = require('../../utils/server.js')
+import WxValidate from '../../utils/WxValidate.js'
 const app = getApp()
 Page({
 
@@ -12,12 +13,13 @@ Page({
     doneList: [], //已打分的项目
     projectManageInfo:{},//项目管理情况
     operMenu: { //项目点击时操作项
-      "0": ["项目设置", "编辑评分内容", "发布", "删除项目"],  //未发布--项目设置，编辑评分内容;发布
-      "1": ["项目设置", "编辑评分内容", "开放评分", "删除项目"],//已发布--项目设置;编辑评分内容；开放评分
+      "0": ["项目设置", "编辑表格内容", "发布", "删除项目"],  //未发布--项目设置，编辑表格内容;发布
+      "1": ["项目设置", "编辑表格内容", "开放评分", "删除项目"],//已发布--项目设置;编辑表格内容；开放评分
       "2": ["查看实时评分", "终止评分"], //已开放评分--查看实时评分；终止评分
       "9": ["查看评分结果"] //已结束--查看结果
     },
-    index: 0
+    index: 0,
+    copyTipShow:false //拷贝弹出提示框是否显示
   },
 
   /**
@@ -25,7 +27,8 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
-
+    //初始化表单验证规则
+    that.initValidate();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -79,7 +82,7 @@ Page({
     let editingProject=e.currentTarget.dataset.project;//获取当前操作的项目
     //let idx = e.currentTarget.dataset.itemIndex;//页面展示的位置
     wx.setStorageSync("editingProject", editingProject);
-    //未发布--项目设置，编辑评分内容
+    //未发布--项目设置，编辑表格内容
     if (editingProject.status == "0") {
       //编辑
       if (e.detail.value == '0') {
@@ -89,7 +92,7 @@ Page({
         })
       }
       else if (e.detail.value == '1') {
-        console.log("未发布--编辑评分内容");
+        console.log("未发布--编辑表格内容");
         //评分类跳转
         if (editingProject.type == 'p')
           wx.navigateTo({
@@ -154,7 +157,7 @@ Page({
         })
       }
     }
-    //已发布--项目设置;编辑评分内容；开放评分
+    //已发布--项目设置;编辑表格内容；开放评分
     else if (editingProject.status == "1") {
       if (e.detail.value == '0') {
         console.log("已发布--项目设置");
@@ -163,7 +166,7 @@ Page({
         })
       }
       else if (e.detail.value == '1') {
-        console.log("已发布--编辑评分内容");
+        console.log("已发布--编辑表格内容");
         //评分类跳转
         if (editingProject.type == 'p')
           wx.navigateTo({
@@ -282,32 +285,14 @@ Page({
       });
     })
   },
-  //拷贝项目，复制该项目的评分内容，重置项目状态
-  copy(e){
+  //显示拷贝项目提示框
+  showCopyTip(e){
     var that=this;
     if (that.data.projectManageInfo.canAdd) {
       console.log('可以复制');
-      wx.showModal({
-        title: '提示',
-        content: '新项目的评分内容与原项目保持一致，并重置项目状态为未发布，原项目不受影响，确认复制？',
-        showCancel: true,
-        cancelText: "取消",
-        confirmText: '确认',
-        success: function (res) {
-          if (res.confirm) {
-            let editingProject = e.currentTarget.dataset.project;//获取当前操作的项目
-            server.addProject(editingProject).then(function (data) {
-              console.log("复制成功id=" + data.id);
-              that.refreshList();
-              //查看用户可维护的项目情况
-              server.getProjectManage().then(data => {
-                that.setData({
-                  projectManageInfo: data
-                })
-              })
-            })
-          }
-        }
+      that.setData({
+        editingProject: e.currentTarget.dataset.project, //获取当前操作的项目
+        copyTipShow:true
       })
     }
     else {
@@ -319,11 +304,62 @@ Page({
       })
     }
   },
+  //关闭复制提示框
+  closeCopyTip(e){
+    var that=this;
+    that.setData({
+      copyTipShow:false
+    })
+  },
+  //复制该项目的评分内容，重置项目状态
+  copy(e){
+    var that=this;
+    let editingProject = that.data.editingProject;//获取选中的项目，id其实没用，会新增
+    editingProject.invite_code = e.detail.value["invite_code"];//赋值新的邀请码
+    //输入框内容验证
+    if (!that.WxValidate.checkForm(e.detail.value)) {
+      const error = that.WxValidate.errorList[0]
+      wx.showModal({
+        content: error.msg,
+        showCancel: false
+      })
+      return false
+    }
+    //发送新增项目请求
+    server.copyProject(editingProject).then(function (data) {
+      console.log("复制成功id=" + data.id);
+      that.closeCopyTip();//关闭复制弹框
+      that.refreshList();
+      //查看用户可维护的项目情况
+      server.getProjectManage().then(data => {
+        that.setData({
+          projectManageInfo: data
+        })
+      })
+      
+    })
+  },
   //已完成的点击直接查看结果
   goResult:function(e){
     let editingProject = e.currentTarget.dataset.project;//获取当前操作的项目
     wx.navigateTo({
       url: '../result/result?id=' + editingProject.id + "&status=" + editingProject.status,
     })
+  },
+  //表单验证
+  initValidate: function (e) {
+    const rules = {
+      invite_code: {
+        required: true,
+        minlength: 4
+      }
+    }
+    const messages = {
+      invite_code: {
+        required: '请填写邀请码',
+        minlength: '请填写不小于4位邀请码'
+      }
+    }
+    this.WxValidate = new WxValidate(rules, messages);
   }
 })

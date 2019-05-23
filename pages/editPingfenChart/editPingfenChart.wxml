@@ -94,7 +94,7 @@
       confirm-type='next'
       confirm-hold='true'
       focus='{{inputIndex0}}'
-      maxlength='12'
+      maxlength='20'
       bindconfirm='inputConfirm' />
       <input type="number" 
       placeholder='请输入评分项分值' 

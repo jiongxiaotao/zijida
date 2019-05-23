@@ -57,7 +57,7 @@
                 <label for="progress_{{item.id}}">当前进度:</label>
               </view>
               <progress class="progress" percent="{{parseInt(item.done_amount / item.amount*100)}}" stroke-width="20" activeColor="#59e" backgroundColor="darkblue" border-radius="10" active="true">
-                <view class='progressText'>{{item.done_amount}}/{{item.amount}}</view>
+                <text class='progressText'>{{item.done_amount}}/{{item.amount}}</text>
               </progress>
               <!-- <view class='itemText'>
                 <text id="progress_{{item.id}}" class="{{item.done_amount ==item.amount ? 'done':'scoring'}}">{{item.done_amount}}/{{item.amount}}</text>
@@ -67,7 +67,7 @@
           </picker>
         </view>
         <!-- 一键复制 -->
-        <view id="copy_{{item.id}}" class='copy' data-project="{{item}}" bindtap='copy'>
+        <view id="copy_{{item.id}}" class='copy' data-project="{{item}}" bindtap='showCopyTip'>
           <image src="/pages/img/icon_copy.png"></image>
           <text>一键复制</text>
         </view>
@@ -112,4 +112,20 @@
     </view>
   </scroll-view>
   <button class='addProject' id="addProject" bindtap='goAddProject'>新建项目</button> 
+
+  <view wx:if="{{copyTipShow}}" class="mask">
+    <view class="popBox">
+      <view class='title'>请设置新邀请码</view>
+      <view class='tipContent'><text  space="emsp">  新项目的评分内容与原项目保持一致，并重置项目状态为未发布，原项目不受影响。请设置新项目的邀请码(不可与原项目重复)</text></view>
+      <form bindsubmit='copy'>
+       <input type="text" 
+        placeholder='请输入新邀请码' 
+        name="invite_code" 
+        maxlength='16'
+         />
+        <button type="default" bindtap="closeCopyTip">取消</button>
+        <button form-type='submit' type="success">复制</button>
+      </form>
+    </view>
+  </view>
 </view>

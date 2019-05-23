@@ -8,9 +8,9 @@
 .listScroll{
   height: 100%;
 }
-/* .list{
-  padding:50rpx 10rpx;
-} */
+.list{
+  margin-bottom: 120rpx;
+}
 .listItem{
   padding:30rpx;
   line-height: 40rpx;
@@ -31,7 +31,7 @@
 .listItem .textContent{
   display: inline-block;
   width: 90%;
-  line-height: 60rpx;
+  line-height: 56rpx;
 }
 .listItem .itemLabel{
   float: left;
@@ -69,7 +69,7 @@
   color:green;
 }
 .progress{
-  width: 60%;
+  width: 55%;
   line-height:40rpx;
   float:left;
   margin: 10rpx;
@@ -84,9 +84,7 @@
 }
 /* 一键复制 */
 .listItem .copy{
-  height:100%;
-  position:relative;
-  top:0;
+  margin-top:28rpx;
   width:10%;
   float:right;
 }
@@ -104,12 +102,43 @@
 .addProject{
   padding:30rpx;
   color:white;
-  line-height:60rpx;
+  line-height:50rpx;
   background:#59e;
   position:fixed;
   right:20rpx;
   bottom:120rpx;
-  width:180rpx;
-  height:180rpx;
-  border-radius:90rpx;
+  width:160rpx;
+  height:160rpx;
+  border-radius:80rpx;
+}
+/* 复制项目提示弹框 */
+.popBox{
+  position:absolute;
+  width:100%;
+  top:25%;
+  background: #cef;
+  padding: 0 0 60rpx 0;
+}
+.popBox .title{
+  background: rgb(2, 96, 211);
+  color: white;
+  font-size: 38rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  font-weight: bold;
+}
+.popBox .tipContent{
+  color: red;
+  padding: 20rpx 40rpx;
+}
+.popBox input{
+  margin-bottom: 20rpx;
+  width: 90%;
+}
+.popBox button{
+  width: 40%;
+  margin: 0 5%;
+  float: left;
+  display: inline-block;
 }
