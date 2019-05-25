@@ -1,8 +1,10 @@
 var server = require('../../utils/server.js')
 import WxValidate from '../../utils/WxValidate.js'
 const app = getApp()
-const typeCode=["p","t","w"]
-const typeDesc = ["评分类", "投票类", "问卷类"]
+// const typeCode=["p","t","w"]
+// const typeDesc = ["评分类", "投票类", "问卷类"]
+const typeCode = ["p"]
+const typeDesc = ["评分类"]
 Page({
 
   /**

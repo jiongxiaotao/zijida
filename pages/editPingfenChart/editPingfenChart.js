@@ -54,7 +54,9 @@ Page({
     that.setData({
       editSubject: e.currentTarget.dataset.subject,
       subjectEditShow: true,
-      editMode:'update' //修改
+      editMode:'update', //修改
+      inputIndex0: true,
+      inputIndex1: false
     });
   },
   //新增评分项
@@ -65,7 +67,9 @@ Page({
         project_id:that.data.projectId
       },
       subjectEditShow: true,
-      editMode:'add'  //新增
+      editMode:'add',  //新增
+      inputIndex0: true,
+      inputIndex1: false
     });
   },
   //修改评分项内容提交后台
@@ -137,7 +141,7 @@ Page({
     var that = this;
     that.setData({
       editVotee: e.currentTarget.dataset.votee,
-      voteeEditShow: true,
+      voteeEditShow: true, 
       editMode: 'update' //修改
     });
   },
