@@ -170,5 +170,6 @@ function getWXUserInfo(succ){
   });
 }
 module.exports = {
-  userLogin: userLogin
+  userLogin: userLogin,
+  login: login
 }

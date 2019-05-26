@@ -44,6 +44,10 @@ Page({
         })
       }
     }
+    //当某页面报code已失效时，会直接跳到首页，并由首页从新执行登录步骤
+    if (options.reason && options.reason=='9001'){
+      common.userLogin();
+    }
     // 登录
     baiduAPI.getWeather().then(data => {
       console.log();

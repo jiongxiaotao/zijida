@@ -50,7 +50,28 @@ function _ajax(option) {
       data: option.data||{},
       success: function (data) {
         wx.hideLoading();
-        option.success(data.data);
+        //查询和更新用户信息有单独逻辑，不进行code失效后跳首页
+        if (option.url.indexOf("miniQueryUserInfo")!=-1 ||
+          option.url.indexOf("miniSaveUserInfo") != -1 ){
+            option.success(data.data);
+        }
+        else{
+          //code失效时，返回到首页
+          if (data.data.BK_CODE == '9001') {
+            //前端缓存code未被清除，清除并跳转首页；
+            //若已被清除说明已经在往首页跳了，防止多交易重复跳首页
+            if (getApp().globalData.loginCode != "") {
+              getApp().globalData.loginCode = "";//清空code变量
+              wx.removeStorageSync("loginStatus");//清除本地缓存
+              wx.reLaunch({
+                url: '/pages/index/index?reason=9001'
+              })
+            }
+          }
+          else
+            option.success(data.data);
+        }
+        
       },
       fail: function (data) {
         wx.hideLoading();

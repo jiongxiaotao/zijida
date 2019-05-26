@@ -1,9 +1,10 @@
 var util = require('util.js');
 var config = require('config.js');
 var encrypt = require('encrypt.js')
+
 const app = getApp()
 //获取unionId
-function getOpenId(code,) {
+function getOpenId(code) {
   return new Promise((resolve, reject) => {
     util.ajax({
       url: "code2Session?appId=" + config.appId + "&jsCode=" + code + "&secret=" + config.appSecret,
@@ -196,7 +197,6 @@ function getBaiduFRResult(sessionCode,videoPath) {
     })
   })
 }
-
 //查询本人负责的项目列表 queryProjectList
 function getProjectList(statusList) {
   const loginCode = encodeURIComponent(getApp().globalData.loginCode); //编码
@@ -204,23 +204,18 @@ function getProjectList(statusList) {
     util.ajax({
       url:"getProjectList?loginCode="+loginCode+"&statusList="+statusList,
       success: function (data) {
-        if (data.BK_STATUS == "00") {
+        // if (data.BK_STATUS == "00") {
           console.log(data);
           resolve(data);
-        }
-        else {
-          wx.showModal({
-            title: '错误',
-            content: data.BK_DESC,
-            showCancel: false,
-            confirmText: '确认',
-            success: function (res) {
-              if (res.confirm) {
-                console.log('该退出的！')
-              }
-            }
-          })
-        }
+        // }
+        // else {
+        //   wx.showModal({
+        //     title: '错误',
+        //     content: data.BK_DESC,
+        //     showCancel: false,
+        //     confirmText: '确认'
+        //   })
+        // }
       },
       fail: function (data) {
         wx.showModal({
