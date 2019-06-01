@@ -16,16 +16,21 @@ Page({
   },
   onLoad: function (options) {
     var that = this;
+    //从url里获取projectId
     that.setData({
-      projectId: options.id ? options.id :0,
+      projectId: options.id ? options.id : 0,
       scoringProject: wx.getStorageSync("scoringProject")
     })
+    that.init();
+  },
+  //页面初始化
+  init:function(){
+    var that=this;
     //根据项目编号查评分的所有被评人，初始化当前用户给他打的分数
     server.getVoteeList(that.data.projectId).then(voteeData => {
       //加载本地缓存，显示个人评分情况
-      var voteeList=voteeData.voteeList;
-     
-      for(let i=0;i<voteeList.length;i++){
+      var voteeList = voteeData.voteeList;
+      for (let i = 0; i < voteeList.length; i++) {
         voteeList[i].totalScore = 0; // 初始分数为0
         voteeList[i].scoreClass = 'red'; //初始标红，未打过分
         const key = "custscoresheet_" + that.data.projectId + "_" + voteeList[i].id;//custScoreSheet_projectId_voteeId 作为storage的key
@@ -33,8 +38,8 @@ Page({
         //缓存中有，打过分
         if (custScoreSheet) {
           voteeList[i].scoreClass = ''; //不标红，打过分
-          for (let j = 0; j < custScoreSheet.length;j++){
-            voteeList[i].totalScore += custScoreSheet[j].score ? parseInt( custScoreSheet[j].score):0; //累加每项分数,默认为空的话加0分
+          for (let j = 0; j < custScoreSheet.length; j++) {
+            voteeList[i].totalScore += custScoreSheet[j].score ? parseInt(custScoreSheet[j].score) : 0; //累加每项分数,默认为空的话加0分
           }
         }
       }
@@ -52,9 +57,7 @@ Page({
       //表单校验
       that.initValidate();
     })
-    
     //判断项目状态如果不为开放评分，则操作和提交不可用
-
   },
   //点击某条弹出修改框
   openScoreSheet: function (e) {

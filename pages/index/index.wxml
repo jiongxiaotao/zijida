@@ -13,6 +13,7 @@
     <view>温度：{{weatherDetail.temperature}}</view>
     <view>风力:{{weatherDetail.wind}}</view>
   </view>
+  <view class='helpButton'><image src="/pages/img/help.png" bindtap='showHelpBox' wx:if="{{!helpBoxShow}}"></image></view>
   <view class='voiceMessage'  animation="{{voiceMessageAnimation}}">
     <image class="voiceButton" src="/pages/img/voice.png" bindtap='showVoiceMessage' wx:if="{{!voiceMessageStatus}}"></image>
     <view class='cancleTip' hidden='{{!ifVoiceButtonTapping}}'>
@@ -48,5 +49,26 @@
      <button bindtap='testMap'>测试地图</button> -->
     <image src="{{tempFilePaths}}" mode="aspecFill" style="width: 200rpx; height: 250rpx"/>
   </view>
-  
+
+
+  <view wx:if="{{helpBoxShow}}" class="mask">
+    <view class="helpBox">
+      <swiper class="helpSwiper" 
+      indicator-dots="true" 
+      indicator-color="#777"
+      indicator-active-color='#59e' 
+       duration="500"
+      bindanimationfinish>
+        <block wx:for="{{helpBoxData}}" wx:for-item="help">
+          <swiper-item>
+            <ul wx:for="{{help.content}}" >
+            <view class="helpContent">{{item}}</view>
+            </ul>
+            <button class='start' wx:if="{{index==helpBoxData.length-1}}" bindtap='hideHelpBox'>开始使用</button>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+  </view>
 </view>
+

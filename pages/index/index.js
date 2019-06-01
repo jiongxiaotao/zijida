@@ -24,6 +24,10 @@ Page({
     voiceMessageAnimation:"", //留言按钮动画
     ifVoiceButtonTapping:false,  //是否显示取消录音提示
     uploadVoiceFlag:true,//是否可以上传声音，当取消时会变为false
+    helpBoxShow:false,//是否显示帮助页面
+    helpBoxData: [{"content":["“自己打”是一款可以自定义的在线评分系统，用户可以自己定义评分项目的所有内容，并开放给其他人进行评分。适合于各大公司进行年终绩效考核、团队投票、问卷调查等工作"]},
+    {"content":["管理员维护项目：","1.点击右下角“项目管理”,点击“新建项目”设置评分项目的基本信息","2.进入“编辑评分内容”对评分项、被评人等详细评分内容进行设置","3.查看我的项目列表，更改项目状态，开放给他人对该项目打分。“邀请码”将作为进入评分的密码，请自主分享给他人","4.项目开放评分后，可实时查看当前评分进度和评分情况"]},
+    {"content":["评委评分：","评委请凭管理员提供给您的“邀请码”进入评分项目，参与评分。评分后您可查看当前项目的实时评分情况"]}]
   },
 
   /**
@@ -33,21 +37,18 @@ Page({
     var that=this;
     //获取app.onLaunch的回调数据
     if (app.globalData.userInfo){
-      that.setData({
-        userInfo: app.globalData.userInfo
-      })
+      that.afterGetUserInfo(options,app.globalData.userInfo);
     } 
     else{
       app.loginCallback = userInfo=>{
-        that.setData({
-          userInfo: userInfo
-        })
+        that.afterGetUserInfo(options,userInfo);
       }
     }
     //当某页面报code已失效时，会直接跳到首页，并由首页从新执行登录步骤
     if (options.reason && options.reason=='9001'){
       common.userLogin();
     }
+
     // 登录
     baiduAPI.getWeather().then(data => {
       console.log();
@@ -67,6 +68,34 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  //common中获取用户信息结束回调
+  afterGetUserInfo: function (options,userInfo){
+    var that=this;
+    that.setData({
+      userInfo: userInfo,
+      helpBoxShow: app.globalData.isNewUser ? true : false //新用户默认显示帮助页面
+    })
+    //若是分享过来，直接跳转到目标页面
+    if (options.redirect) {
+      //进入打分页面
+      if (options.redirect == 'scoring') {
+        //根据邀请码查询项目状态
+        server.getProjectByInviteCode(options.inviteCode).then(function (data) {
+          wx.setStorageSync("scoringProject", data);
+          //已终止，或当前用户已对项目进行打分，直接进入看结果页面
+          if (data.status == 9 || data.curUserDone)
+            wx.navigateTo({
+              url: '../result/result?id=' + data.id + "&fromUser=cust",
+            })
+          else {
+            wx.navigateTo({
+              url: '../scoring/scoring?id=' + data.id + "&status=" + data.status,
+            })
+          }
+        })
+      }
+    }
   },
   //显示天气面板
   showWeatherDetail:function(){
@@ -286,6 +315,20 @@ Page({
       })
     }
    
+  },
+  //关闭帮助页面
+  showHelpBox(e) {
+    var that = this;
+    that.setData({
+      helpBoxShow: true,
+    })
+  },
+  //关闭帮助页面
+  hideHelpBox(e){
+    var that=this;
+    that.setData({
+      helpBoxShow:false,
+    })
   },
   //测试webview
   testJump:function(){

@@ -44,11 +44,14 @@
   font-weight: bold;
 }
 .td {
-    justify-content: center;
-    text-align: center;
-    word-wrap: break-word;
-    border-right: 1px solid gray;
-    flex-shrink: 0;
+  justify-content: center;
+  text-align: center;
+  word-wrap: break-word;
+  border-right: 1px solid gray;
+  flex-shrink: 0;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 .resultNo{
   width:12%;

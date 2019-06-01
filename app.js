@@ -15,11 +15,11 @@ App({
         app.loginCallback(app.globalData.userInfo);
       }
     });
-    
   },
   globalData: {
     loginCode:null,
     userInfo: null,
-    logger:null
+    logger:null,
+    isNewUser:false
   }
 })

@@ -70,11 +70,13 @@ function getUserInfo(loginCode,after){
     //正确返回数据
     if (data.userInfo){
       getApp().globalData.userInfo = data.userInfo;
+      getApp().globalData.isNewUser = false; //库里能查到，是老用户
       console.log("P2S获取用户信息成功:" + getApp().globalData.userInfo.cus_name);
       after&& after();
     }
     //没有查到数据，上次应该没有微信授权获取
     else{
+      getApp().globalData.isNewUser = true;//库里查不到，是新用户
       //wx获取用户信息
       getWXUserInfo(function (data) {
         //保存微信获取的userInfo并返回p2s的userInfo

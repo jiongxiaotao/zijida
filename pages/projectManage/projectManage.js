@@ -55,6 +55,26 @@ Page({
       })
     })
   },
+  //分享时
+  onShareAppMessage(res) {
+    var ret={};
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target);
+      ret={
+        title: '自己打-您的邀请码是' + res.target.dataset.project.invite_code,
+        path: '/pages/index/index?redirect=scoring&id=' + res.target.dataset.project.id+
+        "&inviteCode="+res.target.dataset.project.invite_code
+      }
+    }
+    else{
+      ret= {
+        title: '自己打-自定义评分系统',
+        path: '/pages/index/index'
+      }
+    }
+    return ret;
+  },
   //响应点击导航栏
   navbarTap: function (e) {
     var that = this;

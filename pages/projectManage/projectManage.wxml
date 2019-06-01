@@ -59,17 +59,22 @@
               <progress class="progress" percent="{{parseInt(item.done_amount / item.amount*100)}}" stroke-width="20" activeColor="#59e" backgroundColor="darkblue" border-radius="10" active="true">
                 <text class='progressText'>{{item.done_amount}}/{{item.amount}}</text>
               </progress>
-              <!-- <view class='itemText'>
-                <text id="progress_{{item.id}}" class="{{item.done_amount ==item.amount ? 'done':'scoring'}}">{{item.done_amount}}/{{item.amount}}</text>
-              </view> -->
             </view>
             
           </picker>
         </view>
         <!-- 一键复制 -->
-        <view id="copy_{{item.id}}" class='copy' data-project="{{item}}" bindtap='showCopyTip'>
-          <image src="/pages/img/icon_copy.png"></image>
-          <text>一键复制</text>
+        <view class='operationList'>
+          <view id="share_{{item.id}}" class='operation' wx:if='{{item.status==1||item.status==2}}'>
+            <button class='shareButton' open-type='share' data-project="{{item}}">
+              <image src='/pages/img/icon_share.png'></image>
+            </button>
+            <text>分享</text>
+          </view>
+          <view id="copy_{{item.id}}"  class='operation' data-project="{{item}}" bindtap='showCopyTip'>
+            <image src="/pages/img/icon_copy.png"></image>
+            <text>复制</text>
+          </view>
         </view>
       </view>
     </view>
@@ -83,29 +88,43 @@
       data-project="{{item}}"
       bindtap='goResult'>
         <view class='textContent'>
-          <view>
-            <view class='itemLabel'>
-              <label for="name_{{item.id}}">项目名称:</label>
+          <view style='font-size:36rpx;'>
+              <view class='itemLabel'>
+                <label for="name_{{item.id}}">项目名称:</label>
+              </view>
+              <view class='itemText'>
+                <text id="name_{{item.id}}">{{item.name}}</text>
+              </view>
             </view>
-            <view class='itemText'>
-              <text id="name_{{item.id}}">{{item.name}}</text>
+            <view style='font-size:36rpx;'>
+              <view class='itemLabel'>
+                <label for="inviteCode_{{item.id}}">邀请码:</label>
+              </view>
+              <view class='itemText'>
+                <text id="inviteCode_{{item.id}}" >{{item.invite_code}}</text>
+              </view>
             </view>
-          </view>
-          <view>
-            <view class='itemLabel'>
-              <label for="inviteCode_{{item.id}}">邀请码:</label>
+            <view style='font-size:28rpx;'>
+              <view class='itemShortLabel'>
+                <label for="name_{{item.id}}">项目类型:</label>
+              </view>
+              <view class='itemShortText'>
+                <text id="type_{{item.id}}">{{filter.projectTypeFilter(item.type)}}</text>
+              </view>
+              <view class='itemShortLabel'>
+                <label for="status_{{item.id}}">项目状态:</label>
+              </view>
+              <view class='itemShortText'>
+                <text id="status_{{item.id}}" class='{{filter.publishStatusClassFilter(item.status)}}'>{{filter.publishStatusFilter(item.status)}}</text>
+              </view>
             </view>
-            <view class='itemText'>
-              <text id="inviteCode_{{item.id}}" >{{item.invite_code}}</text>
-            </view>
-          </view>
-          <view>
-            <view class='itemLabel'>
-              <label for="progress_{{item.id}}">当前进度:</label>
-            </view>
-            <view class='itemText'>
-              <text id="progress_{{item.id}}" class="{{item.done_amount ==item.amount ? 'done':'scoring'}}">{{item.done_amount}}/{{item.amount}}</text>
-            </view>
+            <view>
+              <view class='itemLabel'>
+                <label for="progress_{{item.id}}">当前进度:</label>
+              </view>
+              <progress class="progress" percent="{{parseInt(item.done_amount / item.amount*100)}}" stroke-width="20" activeColor="#59e" backgroundColor="darkblue" border-radius="10" active="true">
+                <text class='progressText'>{{item.done_amount}}/{{item.amount}}</text>
+              </progress>
           </view>
         </view>
       </view>
